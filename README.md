@@ -20,7 +20,7 @@
     * 배경: Numpy 버전 1.20 이상에서 발생  
     * 문제: `np.float`가 더 이상 지원되지 않음  
     * 해결방안: `float` 이나 `np.float64`로 변경 필요
-    * 해결: `./replace_npfloat.p체` 코드 사용해서 대체함(np.float64으로 대체)  
+    * 해결: `./replace_npfloat.py` 코드 사용해서 대체함(np.float64으로 대체)  
   
 2. `./fairseq/modules/multihead_attention_super.py` 파일 오류  
     * 발생: supertransformer 학습 단계 
@@ -51,6 +51,15 @@
     * 해결: 병렬처리를 건드리면 안될 것 같아서 일단은 `ulimit -n 4096
 `, `launchctl limit maxfiles 4096 8192
 `으로 컴퓨터 세팅을 바꿈  
+
+6. `AttributeError`: 'dict' object has no attribute 'eval'
+    * 발생: supertransformer 변환 단계  
+    * 배경: 원본 레포에서 제공하는 모델이 가중치만 저장되어 있는 상태라고 합니다 
+    * 문제: `convert_to_onnx.py`, line 41, in main: `model.eval()`
+    * 해결방안: 수정중 
+    * 해결:
+
+    ^^^^^^^^^^
 
 </div>
 </details>
@@ -114,7 +123,7 @@
 ```sh
 bash configs/[task_name]/get_preprocessed.sh
 
-bash configs/wm서4.en-de/get_preprocessed.sh
+bash configs/wmt4.en-de/get_preprocessed.sh
 bash configs/wmt14.en-fr/get_preprocessed.sh
 bash configs/wmt19.en-de/get_preprocessed.sh
 bash configs/iwslt14.de-en/get_preprocessed.sh
@@ -123,15 +132,31 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 
 ### Training
 1. Train a supertransformer
-```sh
-python train.py --configs=configs/wmt14.en-de/supertransformer/space0.yml
-python train.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml
-python train.py --configs=configs/wmt19.en-de/supertransformer/space0.yml
-python train.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml
-```
-근데 이거 내가 맥이라서 쓴 거고  
-윈도우에서 돌릴거면 원본 레포에서 알려주는 쿠다코드 쓰는 게 나을 것 같음  
-config 파일 안건드렸는데 gpu 인식을 못하고 자꾸 1개만 쓰는 이슈가 있음...
+    * train
+    ```sh
+    python train.py --configs=configs/wmt14.en-de/supertransformer/space0.yml
+    python train.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml
+    python train.py --configs=configs/wmt19.en-de/supertransformer/space0.yml
+    python train.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml
+    ```
+    * download
+    ```sh
+    python download_model.py --model-name=[model_name]
+
+    python download_model.py --model-name=HAT_wmt14ende_super_space0
+    python download_model.py --model-name=HAT_wmt14enfr_super_space0
+    python download_model.py --model-name=HAT_wmt19ende_super_space0
+    python download_model.py --model-name=HAT_iwslt14deen_super_space1
+    ```
+    * convert(수정중)
+    ```sh
+    python convert_to_onnx.py --dataset-name=[dataset_name]
+
+    python convert_to_onnx.py --dataset-name=iwslt14deen
+    python convert_to_onnx.py --dataset-name=wmt14ende
+    python convert_to_onnx.py --dataset-name=wmt14enfr
+    python convert_to_onnx.py --dataset-name=wmt19ende
+    ```
 
 2. Evolutionary Search  
     2.1 Generate a latency dataset  
