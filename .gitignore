@@ -16,6 +16,7 @@ data/binary/wmt14_en_fr/*
 !data/binary/wmt19_en_de/
 data/binary/wmt19_en_de/*
 !data/binary/wmt19_en_de/*.tgz
+downloaded_models/
 fairseq.egg-info/
 latency_dataset/
 __pycache__/
