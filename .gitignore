@@ -19,4 +19,4 @@ data/binary/wmt19_en_de/*
 fairseq.egg-info/
 latency_dataset/
 __pycache__/
-
+.DS_Store
