@@ -43,7 +43,7 @@
     * 해결방안: `exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)`로 변경 필요
     * 해결: 해당 파일 해당 라인 수정함  
 
-5. `OSError`: [Errno 24] Too many open files
+5. `OSError`: [Errno 24] Too many open files (개인적인 문제)
     * 발생: supertransformer 학습 단계 
     * 배경: `ulimit -n`으로 확인해 본 결과 최대 256개....
     * 문제: 컴퓨터 세팅 문제 
@@ -53,13 +53,19 @@
 `으로 컴퓨터 세팅을 바꿈  
 
 6. `AttributeError`: 'dict' object has no attribute 'eval'
-    * 발생: supertransformer 변환 단계  
+    * 발생: supertransformer > onnx 변환 단계  
     * 배경: 원본 레포에서 제공하는 모델이 가중치만 저장되어 있는 상태라고 합니다 
     * 문제: `convert_to_onnx.py`, line 41, in main: `model.eval()`
-    * 해결방안: 수정중 
-    * 해결:
+    * 해결방안: 모델을 fairseq의 task 써서 빌드하기  
+    * 해결: 해당 파일 해당 부분 수정함(model = task.build_model(args))
 
-    ^^^^^^^^^^
+7. `TypeError`: forward() missing 1 required positional argument: 'prev_output_tokens'
+    * 발생: supertransformer > onnx 변환 단계  
+    * 배경: 
+    * 문제: `convert_to_onnx.py`, line 67, in main: export_to_onnx(model, src_vocab_size, tgt_vocab_size, dataset_name)
+    * 해결방안:  
+    * 해결: 수정중....
+
 
 </div>
 </details>
@@ -150,12 +156,13 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```
     * convert(수정중)
     ```sh
-    python convert_to_onnx.py --dataset-name=[dataset_name]
+    convert supertransformer
+    python convert_to_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
 
-    python convert_to_onnx.py --dataset-name=iwslt14deen
-    python convert_to_onnx.py --dataset-name=wmt14ende
-    python convert_to_onnx.py --dataset-name=wmt14enfr
-    python convert_to_onnx.py --dataset-name=wmt19ende
+    python convert_to_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml
+    python convert_to_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
+    python convert_to_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml
+    python convert_to_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
     ```
 
 2. Evolutionary Search  
