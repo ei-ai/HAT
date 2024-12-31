@@ -12,6 +12,11 @@ import sys
 from fairseq import utils
 from fairseq.data.indexed_dataset import get_available_dataset_impl
 
+def get_converting_parser(default_task='translation'):
+    parser = get_parser('Converting', default_task)
+    add_dataset_args(parser)
+    add_model_args(parser)
+    return parser
 
 def get_preprocessing_parser(default_task='translation'):
     parser = get_parser('Preprocessing', default_task)
