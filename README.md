@@ -27,6 +27,12 @@
     * 배경: PyTorch view 객체 in-place 연산(*=) 지원 안됨  
     * 문제: 해당 파일 line 198 `q *= self.scaling` 존재
     * 해결방안: `q = q * self.scaling`로 변경 필요
+    * 해결: 해당 파일 해당 라인 수정함 
+    `./fairseq/modules/multihead_attention.py` 파일 오류  
+    * 발생: supertransformer 학습 단계 
+    * 배경: PyTorch view 객체 in-place 연산(*=) 지원 안됨  
+    * 문제: 해당 파일 line 162 `q *= self.scaling` 존재
+    * 해결방안: `q = q * self.scaling`로 변경 필요
     * 해결: 해당 파일 해당 라인 수정함  
 
 3. `UserWarning`: This overload of add_ is deprecated 
@@ -66,6 +72,12 @@
     * 해결방안:  
     * 해결: 수정중....
 
+8. `TracerWarning` 
+    1. TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
+    2. Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    3. .item() 못쓰게 해야함
+    * [참고](https://velog.io/@dust_potato/ONNX%EB%9E%80-1-%EA%B8%B0%EB%B3%B8-%EC%84%A4%EB%AA%85%EA%B3%BC-%EC%9B%90%EB%A6%AC)
+
 
 </div>
 </details>
@@ -87,12 +99,15 @@
     cffi==1.17.1
     click==8.1.8
     colorama==0.4.6
+    coloredlogs==15.0.1
     ConfigArgParse==1.7
     Cython==3.0.11
     -e git+https://github.com/mit-han-lab/hardware-aware-transformers.git@70e5a279d080670208249fdd98ed731fa9bcc466#egg=fairseq
-    fastBPE @ file:///Users/minseokim/Documents/git/hardware-aware-transformers/fastBPE
+    fastBPE @ file:///Users/(생략)/hardware-aware-transformers/fastBPE
     filelock==3.16.1
+    flatbuffers==24.12.23
     fsspec==2024.12.0
+    humanfriendly==10.0
     importlib_metadata==8.5.0
     Jinja2==3.1.5
     joblib==1.4.2
@@ -101,6 +116,8 @@
     mpmath==1.3.0
     networkx==3.2.1
     numpy==2.0.2
+    onnx==1.17.0
+    onnxruntime==1.19.2
     packaging==24.2
     portalocker==3.0.0
     protobuf==5.29.2
@@ -128,7 +145,8 @@
 ### Data Preparation
 ```sh
 bash configs/[task_name]/get_preprocessed.sh
-
+```
+```sh
 bash configs/wmt4.en-de/get_preprocessed.sh
 bash configs/wmt14.en-fr/get_preprocessed.sh
 bash configs/wmt19.en-de/get_preprocessed.sh
@@ -148,7 +166,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     * download
     ```sh
     python download_model.py --model-name=[model_name]
-
+    ```
+    ```sh
     python download_model.py --model-name=HAT_wmt14ende_super_space0
     python download_model.py --model-name=HAT_wmt14enfr_super_space0
     python download_model.py --model-name=HAT_wmt19ende_super_space0
@@ -157,12 +176,13 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     * convert(수정중)
     ```sh
     convert supertransformer
-    python convert_to_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
-
-    python convert_to_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml
-    python convert_to_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
-    python convert_to_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml
-    python convert_to_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
+    python convert_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
+    ```
+    ```sh
+    python convert_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml
+    python convert_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
+    python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml
+    python convert_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
     ```
 
 2. Evolutionary Search  

@@ -17,7 +17,11 @@ data/binary/wmt14_en_fr/*
 data/binary/wmt19_en_de/*
 !data/binary/wmt19_en_de/*.tgz
 downloaded_models/
+fairseq_original/
+fairseq_to_trace/
 fairseq.egg-info/
 latency_dataset/
+onnx_models/
 __pycache__/
 .DS_Store
+onnx_tracewarning.md
