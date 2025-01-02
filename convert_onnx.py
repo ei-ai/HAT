@@ -27,7 +27,7 @@ def export_to_onnx(model, src_vocab_size, tgt_vocab_size, dataset_name):
     dummy_lengths = torch.tensor([10])  # Sequence lengths for the batch
     dummy_prev_output = torch.randint(0, tgt_vocab_size, (1, 10))  # Decoder input
 
-    onnx_file_path = f"./onnx_models/{dataset_name}_prepared.onnx"
+    onnx_file_path = f"./onnx_models/{dataset_name}.onnx"
     os.makedirs(os.path.dirname(onnx_file_path), exist_ok=True)
 
     torch.onnx.export(
