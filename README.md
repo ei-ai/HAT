@@ -207,7 +207,7 @@
 bash configs/[task_name]/get_preprocessed.sh
 ```
 ```sh
-bash configs/wmt4.en-de/get_preprocessed.sh
+bash configs/wmt14.en-de/get_preprocessed.sh
 bash configs/wmt14.en-fr/get_preprocessed.sh
 bash configs/wmt19.en-de/get_preprocessed.sh
 bash configs/iwslt14.de-en/get_preprocessed.sh
