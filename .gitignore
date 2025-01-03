@@ -1,3 +1,4 @@
+*.so
 .eggs/
 build/
 checkpoints/iwslt14.de-en/supertransformer/space1/tensorboard
