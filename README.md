@@ -262,9 +262,29 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
     ```
     ```sh
+    python latency_dataset.py --configs=configs/iwslt14.de-en/latency_dataset/gpu_titanxp.yml
     python latency_dataset.py --configs=configs/wmt14.en-de/latency_dataset/cpu_raspberrypi.yml
+    python latency_dataset.py --configs=configs/wmt14.en-de/latency_dataset/cpu_xeon.yml
+    python latency_dataset.py --configs=configs/wmt14.en-de/latency_dataset/gpu_titanxp.yml
+    python latency_dataset.py --configs=configs/wmt14.en-fr/latency_dataset/cpu_raspberrypi.yml
+    python latency_dataset.py --configs=configs/wmt14.en-fr/latency_dataset/cpu_xeon.yml
+    python latency_dataset.py --configs=configs/wmt14.en-fr/latency_dataset/gpu_titanxp.yml
+    python latency_dataset.py --configs=configs/wmt19.en-de/latency_dataset/gpu_titanxp.yml
     ```
-    2.2 Train a latency predictor  
+    2.2 Train a latency predictor
+    ```sh
+    python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
+    ```
+    ```sh
+    python latency_predictor.py --configs=configs/iwslt14.de-en/latency_predictor/gpu_titanxp.yml
+    python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/cpu_raspberrypi.yml
+    python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/cpu_xeon.yml
+    python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/gpu_titanxp.yml
+    python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/cpu_raspberrypi.yml
+    python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/cpu_xeon.yml
+    python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/gpu_titanxp.yml
+    python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/gpu_titanxp.yml
+    ```
     2.3 Run evolutionary search with a latency constraint  
 
 4. Train a Searched SubTransformer
