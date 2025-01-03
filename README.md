@@ -12,7 +12,7 @@
 
 ## 수정한 부분
 <details>
-<summary>파이썬 라이브러리 버전 충돌 문제</summary>
+<summary>supertransformer 학습 단계</summary>
 <div markdown=1>
 
 1. `AttributeError`: module 'numpy' has no attribute 'float'  
@@ -58,21 +58,27 @@
 `, `launchctl limit maxfiles 4096 8192
 `으로 컴퓨터 세팅을 바꿈  
 
-6. `AttributeError`: 'dict' object has no attribute 'eval'
+</div>
+</details>
+
+<details>
+<summary>supertransformer > onnx 변환 단계 </summary>
+<div markdown=1>
+1. `AttributeError`: 'dict' object has no attribute 'eval'
     * 발생: supertransformer > onnx 변환 단계  
     * 배경: 원본 레포에서 제공하는 모델이 가중치만 저장되어 있는 상태라고 합니다 
     * 문제: `convert_to_onnx.py`, line 41, in main: `model.eval()`
     * 해결방안: 모델을 fairseq의 task 써서 빌드하기  
     * 해결: 해당 파일 해당 부분 수정함(model = task.build_model(args))
 
-7. `TypeError`: forward() missing 1 required positional argument: 'prev_output_tokens'
+2. `TypeError`: forward() missing 1 required positional argument: 'prev_output_tokens'
     * 발생: supertransformer > onnx 변환 단계  
     * 배경: 
     * 문제: `convert_to_onnx.py`, line 67, in main: export_to_onnx(model, src_vocab_size, tgt_vocab_size, dataset_name)
     * 해결방안:  
     * 해결: 수정중....
 
-8. `TracerWarning` 
+3. `TracerWarning` 
     1. TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
     2. Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
     3. .item() 못쓰게 해야함
@@ -87,7 +93,7 @@
 ## 실행 및 세팅
 ### Dependencies
 <details>
-<summary> [MINSEO KIM](https://github.com/440g) </summary>
+<summary> MacOS </summary>
 <div markdown=1>
 
 * OS: Sonoma 14.1
@@ -135,6 +141,67 @@
     typing_extensions==4.12.2
     ujson==5.10.0
     zipp==3.21.0
+    ```
+
+</div>
+</details>
+
+<details>
+<summary> Ububtu </summary>
+<div markdown=1>
+
+* OS: Ubuntu 22.04 LTS (Windows WSL 사용)
+* Python = 3.9.21
+* requirements.txt
+    ```sh
+    cffi==1.17.1
+    click==8.1.8
+    colorama==0.4.6
+    coloredlogs==15.0.1
+    ConfigArgParse==1.7
+    Cython==3.0.11
+    -e git+https://github.com/mit-han-lab/hardware-aware-transformers.git@70e5a279d080670208249fdd98ed731fa9bcc466#egg=fairseq
+    fastBPE==0.1.1
+    filelock==3.16.1
+    flatbuffers==24.12.23
+    fsspec==2024.12.0
+    humanfriendly==10.0
+    Jinja2==3.1.5
+    joblib==1.4.2
+    lxml==5.3.0
+    MarkupSafe==3.0.2
+    mpmath==1.3.0
+    networkx==3.2.1
+    numpy==2.0.2
+    nvidia-cublas-cu12==12.4.5.8
+    nvidia-cuda-cupti-cu12==12.4.127
+    nvidia-cuda-nvrtc-cu12==12.4.127
+    nvidia-cuda-runtime-cu12==12.4.127
+    nvidia-cudnn-cu12==9.1.0.70
+    nvidia-cufft-cu12==11.2.1.3
+    nvidia-curand-cu12==10.3.5.147
+    nvidia-cusolver-cu12==11.6.1.9
+    nvidia-cusparse-cu12==12.3.1.170
+    nvidia-nccl-cu12==2.21.5
+    nvidia-nvjitlink-cu12==12.4.127
+    nvidia-nvtx-cu12==12.4.127
+    onnx==1.17.0
+    onnxruntime==1.19.2
+    packaging==24.2
+    portalocker==3.1.1
+    protobuf==5.29.2
+    pycparser==2.22
+    regex==2024.11.6
+    sacrebleu==2.5.0
+    sacremoses==0.1.1
+    sympy==1.13.1
+    tabulate==0.9.0
+    tensorboardX==2.6.2.2
+    torch==2.5.1
+    tqdm==4.67.1
+    triton==3.1.0
+    typing_extensions==4.12.2
+    ujson==5.10.0
     ```
 
 </div>
