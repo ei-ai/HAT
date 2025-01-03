@@ -234,8 +234,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python download_model.py --model-name=HAT_iwslt14deen_super_space1
     ```
     * convert(수정중)
-    ```sh
     convert supertransformer
+    ```sh
     python convert_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
     ```
     ```sh
