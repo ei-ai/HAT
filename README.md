@@ -257,11 +257,17 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```
 
 2. Evolutionary Search  
-    2.1 Generate a latency dataset  
+    2.1 Generate a latency dataset
+    ```sh
+    python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
+    ```
+    ```sh
+    python latency_dataset.py --configs=configs/wmt14.en-de/latency_dataset/cpu_raspberrypi.yml
+    ```
     2.2 Train a latency predictor  
     2.3 Run evolutionary search with a latency constraint  
 
-3. Train a Searched SubTransformer
+4. Train a Searched SubTransformer
 
 
 
