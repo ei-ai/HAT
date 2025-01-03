@@ -15,6 +15,7 @@ fairseq_to_trace/
 fairseq.egg-info/
 latency_dataset/
 onnx_models/
+rknn_models/
 __pycache__/
 .DS_Store
 onnx_tracewarning.md

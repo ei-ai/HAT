@@ -234,7 +234,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python download_model.py --model-name=HAT_iwslt14deen_super_space1
     ```
     * convert(수정중)    
-    convert supertransformer
+    convert supertransformer   
+    onnx  
     ```sh
     python convert_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
     ```
@@ -243,6 +244,16 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python convert_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
     python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml
     python convert_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
+    ```
+    rknn  
+    ```sh
+    python convert_rknn.py --dataset-name=[dataset_name]
+    ```
+    ```sh
+    python convert_rknn.py --dataset-name=wmt14ende
+    python convert_rknn.py --dataset-name=wmt14enfr
+    python convert_rknn.py --dataset-name=wmt19ende
+    python convert_rknn.py --dataset-name=iwslt14deen
     ```
 
 2. Evolutionary Search  

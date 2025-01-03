@@ -38,9 +38,9 @@ def export_to_onnx(model, src_vocab_size, tgt_vocab_size, dataset_name):
         input_names=["src_tokens", "src_lengths", "prev_output_tokens"],
         output_names=["output"],
         dynamic_axes={
-            "src_tokens": {0: "batch_size", 1: "sequence_length"},
-            "prev_output_tokens": {0: "batch_size", 1: "sequence_length"},
-            "output": {0: "batch_size", 1: "sequence_length"},
+            # "src_tokens": {0: "batch_size", 1: "sequence_length"},
+            # "prev_output_tokens": {0: "batch_size", 1: "sequence_length"},
+            # "output": {0: "batch_size", 1: "sequence_length"},
         }
     )
     print(f"| Saved  \n| ONNX model path: {onnx_file_path}")
