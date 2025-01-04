@@ -18,7 +18,6 @@ onnx_models/
 rknn_models/
 __pycache__/
 .DS_Store
-onnx_tracewarning.md
 *.onnx
 
 .Python
