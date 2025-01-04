@@ -1,24 +1,8 @@
-# wmt19ende
-`python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml`
-
-/Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
-  bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
-/Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:59: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  if self.weights is None or max_pos > self.weights.size(0):
-/Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:254: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  if not encoder_padding_mask.any():
-/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:108: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  assert embed_dim == self.embed_dim, (embed_dim, self.embed_dim)
-/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:109: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  assert list(query.size()) == [tgt_len, bsz, embed_dim]
-/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:223: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  assert list(attn_weights.size()) == [bsz * self.num_heads, tgt_len, src_len]
-/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:253: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  assert list(attn.size()) == [bsz * self.num_heads, tgt_len, self.head_dim]
-/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:254: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  if (self.onnx_trace and attn.size(1) == 1):
-/Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:480: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
-  if not hasattr(self, '_future_mask') or self._future_mask is None or self._future_mask.device != tensor.device or self._future_mask.size(0) < dim:
+# Contents
+* [wmt14ende](#wmt14ende)
+* [wmt14enfr](#wmt14enfr)
+* [wmt19ende](#wmt19ende)
+* [iwslt14deen](#iwslt14deen)
 
 # wmt14ende
 `python convert_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml`
@@ -41,7 +25,9 @@
   if (self.onnx_trace and attn.size(1) == 1):
 /Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:480: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
   if not hasattr(self, '_future_mask') or self._future_mask is None or self._future_mask.device != tensor.device or self._future_mask.size(0) < dim:
-
+    
+[맨위로](#contents)
+    
 # wmt14enfr
 `python convert_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml`
 
@@ -109,8 +95,33 @@ Traceback (most recent call last):
   File "/Users/minseokim/Documents/git/HAT/fairseq/modules/embedding_super.py", line 50, in sampled_weight
     return self.sample_parameters(part)[part]['weight']
 KeyError: 'weight'
+    
+[맨위로](#contents)
+    
+# wmt19ende
+`python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml`
 
-
+/Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
+  bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
+/Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:59: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if self.weights is None or max_pos > self.weights.size(0):
+/Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:254: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if not encoder_padding_mask.any():
+/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:108: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  assert embed_dim == self.embed_dim, (embed_dim, self.embed_dim)
+/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:109: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  assert list(query.size()) == [tgt_len, bsz, embed_dim]
+/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:223: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  assert list(attn_weights.size()) == [bsz * self.num_heads, tgt_len, src_len]
+/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:253: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  assert list(attn.size()) == [bsz * self.num_heads, tgt_len, self.head_dim]
+/Users/minseokim/Documents/git/HAT/fairseq/modules/multihead_attention.py:254: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if (self.onnx_trace and attn.size(1) == 1):
+/Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:480: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if not hasattr(self, '_future_mask') or self._future_mask is None or self._future_mask.device != tensor.device or self._future_mask.size(0) < dim:
+    
+[맨위로](#contents)
+    
 # iwslt14deen
 `python convert_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml`
 
@@ -132,3 +143,6 @@ KeyError: 'weight'
   if (self.onnx_trace and attn.size(1) == 1):
 /Users/minseokim/Documents/git/HAT/fairseq/models/transformer.py:480: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
   if not hasattr(self, '_future_mask') or self._future_mask is None or self._future_mask.device != tensor.device or self._future_mask.size(0) < dim:
+      
+[맨위로](#contents)
+    
