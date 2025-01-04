@@ -25,7 +25,7 @@ def export_to_onnx(model, src_vocab_size, tgt_vocab_size, dataset_name):
 
     dummy_src = torch.randint(0, src_vocab_size, (1, 10))  # (batch_size, sequence_length)
     dummy_lengths = torch.tensor([10])  # Sequence lengths for the batch
-    dummy_prev_output = torch.ran+++++++++++++++++++++++++++++dint(0, tgt_vocab_size, (1, 10))  # Decoder input
+    dummy_prev_output = torch.randint(0, tgt_vocab_size, (1, 10))  # Decoder input
 
     onnx_file_path = f"./onnx_models/{dataset_name}.onnx"
     os.makedirs(os.path.dirname(onnx_file_path), exist_ok=True)
@@ -78,6 +78,7 @@ def main():
     model = task.build_model(args)
     model.eval()
 
+    
     src_vocab_size = len(task.source_dictionary)
     tgt_vocab_size = len(task.target_dictionary)
 

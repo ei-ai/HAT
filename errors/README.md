@@ -73,7 +73,8 @@
     1. TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
     2. Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
     3. .item() 못쓰게 해야함
-    * [참고](https://velog.io/@dust_potato/ONNX%EB%9E%80-1-%EA%B8%B0%EB%B3%B8-%EC%84%A4%EB%AA%85%EA%B3%BC-%EC%9B%90%EB%A6%AC)
+    * [참고](https://jseobyun.tistory.com/578)
+    * [netron](https://netron.app/)
 
 
 </div>
