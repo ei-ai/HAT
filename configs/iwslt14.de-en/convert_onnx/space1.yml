@@ -4,6 +4,9 @@ max-tokens: 4096
 data: data/binary/iwslt14_de_en
 source-lang: de
 target-lang: en
+src-dict-path: data/binary/iwslt14_de_en/dict.de.txt
+tgt-dict-path: data/binary/iwslt14_de_en/dict.en.txt
+model-path: downloaded_models/HAT_iwslt14deen_super_space1.pt
 
 # training settings
 # distributed-world-size: 1
