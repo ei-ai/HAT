@@ -32,7 +32,12 @@ def main(args):
     task = tasks.setup_task(args)
 
     # Build model
-    model = task.build_model(args)
+    if args.latnpu:
+        # model = rknn 모델을 참조하도록 세팅
+        # rknn toolkit 사용
+        # convert_rknn.py에 있는 경로명 참고
+    else:
+        model = task.build_model(args)
     print(model)
 
     # specify the length of the dummy input for profile
@@ -168,6 +173,7 @@ def main(args):
 def cli_main():
     parser = options.get_training_parser()
 
+    parser.add_argument('--latnpu', action='store_true', help='measure SubTransformer latency on NPU')
     parser.add_argument('--latgpu', action='store_true', help='measure SubTransformer latency on GPU')
     parser.add_argument('--latcpu', action='store_true', help='measure SubTransformer latency on CPU')
     parser.add_argument('--latiter', type=int, default=300, help='how many iterations to run when measure the latency')
