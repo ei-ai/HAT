@@ -312,6 +312,8 @@ def add_dataset_args(parser, train=False, gen=False, convert=False):
                            help='target-dict-path')
         group.add_argument('--model-path', default=None, metavar='TGTDICT',
                            help='model-path')
+        group.add_argument('--beam', default=5, type=int, metavar='N',
+                       help='beam size')
     # fmt: on
     return group
 
