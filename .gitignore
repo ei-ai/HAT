@@ -3,7 +3,6 @@
 build/
 checkpoints/iwslt14.de-en/supertransformer/space1/tensorboard
 checkpoints/iwslt14.de-en/supertransformer/space1/*.pt
-subtransformer/
 process.sh
 data/binary/iwslt14_de_en/
 data/binary/wmt16_en_de/
