@@ -4,8 +4,12 @@
 * [wmt19ende](#wmt19ende)
 * [iwslt14deen](#iwslt14deen)
 
+* 변환 시 원래 인풋을 넣어줘야 제대로 에러도 잡히고 변환도 제대로 된다고 하길래, 인풋값 수정을 함
+* 그랬더니 wmt14enfr와 같은 문제가 모든 데이터셋에서 발생
+* 현재 수정중 
+
 # wmt14ende
-`python convert_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/space0.yml`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
@@ -29,7 +33,7 @@
 [맨위로](#contents)
     
 # wmt14enfr
-`python convert_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/space0.yml`
 
 Traceback (most recent call last):
   File "/Users/minseokim/Documents/git/HAT/convert_onnx.py", line 89, in <module>
@@ -99,7 +103,7 @@ KeyError: 'weight'
 [맨위로](#contents)
     
 # wmt19ende
-`python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/space0.yml`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
@@ -123,7 +127,7 @@ KeyError: 'weight'
 [맨위로](#contents)
     
 # iwslt14deen
-`python convert_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml`
+`python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/space1.yml`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)

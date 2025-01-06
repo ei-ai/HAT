@@ -167,13 +167,13 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     convert supertransformer   
     onnx  
     ```sh
-    python convert_onnx.py --dataset-name=[dataset_name] --configs=configs/[task_name]/convert_onnx/[search_space].yml
+    python convert_onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml
     ```
     ```sh
-    python convert_onnx.py --dataset-name=wmt14ende --configs=configs/wmt14.en-de/convert_onnx/space0.yml
-    python convert_onnx.py --dataset-name=wmt14enfr --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
-    python convert_onnx.py --dataset-name=wmt19ende --configs=configs/wmt19.en-de/convert_onnx/space0.yml
-    python convert_onnx.py --dataset-name=iwslt14deen --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
+    python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/space0.yml
+    python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/space0.yml
+    python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/space0.yml
+    python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/space1.yml
     ```
     rknn  
     ```sh
