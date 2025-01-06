@@ -11,7 +11,7 @@
 
 
 ## 수정한 부분
-[errors](https://github.com/ei-ai/HAT/tree/main/errors) 참고고
+[errors](https://github.com/ei-ai/HAT/tree/main/errors) 참고
 
 ## 실행 및 세팅
 ### Dependencies
