@@ -81,3 +81,15 @@
 </details>
 
 ## supertransformer > onnx > rknn 변환 단계
+
+## 앞으로 수정해야 할 파일들들
+### 2.1 Generate a latency dataset  
+`latency_dataset.py`  
+npu에서 돌아가게 수정  
+### 2.2 Train a latency predictor  
+`latency_predictor.py` 
+### 2.3 Run evolutionary search with a latency constraint  
+`evo_search.py`   
+### 3. Train a Searched SubTransformer
+`train.py`  
+-> & 모델 변환 후 돌아가는 것 확인  
