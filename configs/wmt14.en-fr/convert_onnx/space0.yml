@@ -3,6 +3,11 @@ arch: transformersuper_wmt_en_fr
 share-all-embeddings: True
 max-tokens: 4096
 data: data/binary/wmt14_en_fr
+source-lang: en
+target-lang: fr
+src-dict-path: data/binary/wmt14_en_fr/dict.en.txt
+tgt-dict-path: data/binary/wmt14_en_fr/dict.fr.txt
+model-path: downloaded_models/HAT_wmt14enfr_super_space0.pt
 
 # training settings
 optimizer: adam

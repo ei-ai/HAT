@@ -54,10 +54,13 @@ class SinusoidalPositionalEmbedding(nn.Module):
 
     def forward(self, input, incremental_state=None, timestep=None, **kwargs):
         """Input is expected to be of size [bsz x seqlen]."""
-        bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
+        # bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
+        bsz, seq_len = input.size()
         max_pos = self.padding_idx + 1 + seq_len
         if self.weights is None or max_pos > self.weights.size(0):
             # recompute/expand embeddings if needed
+            new_max_pos = max(max_pos, self.weights.size(0) if self.weights is not None else 0)
+
             self.weights = SinusoidalPositionalEmbedding.get_embedding(
                 max_pos,
                 self.embedding_dim,

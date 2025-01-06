@@ -14,7 +14,7 @@ from fairseq.data.indexed_dataset import get_available_dataset_impl
 
 def get_converting_parser(default_task='translation'):
     parser = get_parser('Converting', default_task)
-    add_dataset_args(parser)
+    add_dataset_args(parser, convert=True)
     add_model_args(parser)
     return parser
 
@@ -263,7 +263,7 @@ def add_preprocess_args(parser):
     return parser
 
 
-def add_dataset_args(parser, train=False, gen=False):
+def add_dataset_args(parser, train=False, gen=False, convert=False):
     group = parser.add_argument_group('Dataset and data loading')
     # fmt: off
     group.add_argument('--num-workers', default=10, type=int, metavar='N',
@@ -305,6 +305,13 @@ def add_dataset_args(parser, train=False, gen=False):
                            help='shard generation over N shards')
         group.add_argument('--shard-id', default=0, type=int, metavar='ID',
                            help='id of the shard to generate (id < num_shards)')
+    if convert:
+        group.add_argument('--src-dict-path', default=None, metavar='SRCDICT',
+                           help='source-dict-path')
+        group.add_argument('--tgt-dict-path', default=None, metavar='TGTDICT',
+                           help='target-dict-path')
+        group.add_argument('--model-path', default=None, metavar='TGTDICT',
+                           help='model-path')
     # fmt: on
     return group
 
