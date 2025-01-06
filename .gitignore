@@ -13,7 +13,12 @@ downloaded_models/
 fairseq_original/
 fairseq_to_trace/
 fairseq.egg-info/
+!latency_dataset/
 latency_dataset/
+!configs/iwslt14.de-en/latency_dataset/
+!configs/wmt14.en-de/latency_dataset/
+!configs/wmt14.en-fr/latency_dataset/
+!configs/wmt19.en-de/latency_dataset/
 onnx_models/
 rknn_models/
 __pycache__/
