@@ -191,7 +191,6 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```sh
     python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
     ```
-    ```
     2.2 Train a latency predictor
     ```sh
     python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
@@ -203,6 +202,15 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml
     ```
     2.3 Run evolutionary search with a latency constraint  
+    ```sh
+    python evo_search.py --configs=[supertransformer_config_file].yml --evo-configs=[evo_settings].yml
+    ```
+    ```sh
+    python evo_search.py --configs=configs/wmt14.en-de/supertransformer/space0.yml --evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml
+    python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml --evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml
+    python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-fr/evo_search/wmt19ende_npu.yml
+    python evo_search.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml --evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml
+    ```
 
 4. Train a Searched SubTransformer
 

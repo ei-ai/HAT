@@ -47,9 +47,13 @@ class EmbeddingSuper(nn.Embedding):
         return self._sample_parameters(part) if self.profiling or resample else self.samples
 
     def sampled_weight(self, part):
-        return self.sample_parameters(part)[part]['weight']
+        sampled_weight = self.sample_parameters(part)[part]['weight']
+        #if self.onnx_trace:
+        #    return sampled_weight.detach().clone()
+        return sampled_weight
 
     def forward(self, input, part='encoder'):
+        print("self.sampled_weight(part)", self.sampled_weight(part))
         return F.embedding(input, self.sampled_weight(part), self.padding_idx, self.max_norm, self.norm_type, self.scale_grad_by_freq, self.sparse)
 
 
