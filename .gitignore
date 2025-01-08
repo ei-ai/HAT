@@ -9,6 +9,7 @@ data/binary/wmt16_en_de/
 data/binary/wmt14_en_fr/
 data/binary/wmt19_en_de/
 downloaded_models/
+errors/*.txt
 fairseq_original/
 fairseq_to_trace/
 fairseq.egg-info/

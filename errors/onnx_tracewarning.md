@@ -9,7 +9,8 @@
 * 현재 수정중 
 
 # wmt14ende
-`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml`
+`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml > ./errors/convert_onnx_wmt14.en-de.txt 2>&1`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
@@ -33,7 +34,7 @@
 [맨위로](#contents)
     
 # wmt14enfr
-`python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml`
 
 Traceback (most recent call last):
   File "/Users/minseokim/Documents/git/HAT/convert_onnx.py", line 89, in <module>
@@ -103,7 +104,7 @@ KeyError: 'weight'
 [맨위로](#contents)
     
 # wmt19ende
-`python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/space0.yml`
+`python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)
@@ -127,7 +128,7 @@ KeyError: 'weight'
 [맨위로](#contents)
     
 # iwslt14deen
-`python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/space1.yml`
+`python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml`
 
 /Users/minseokim/Documents/git/HAT/fairseq/modules/sinusoidal_positional_embedding.py:57: TracerWarning: Iterating over a tensor might cause the trace to be incorrect. Passing a tensor of different shape won't change the number of iterations executed (and might lead to errors or silently give incorrect results).
   bsz, seq_len = torch.onnx.operators.shape_as_tensor(input)

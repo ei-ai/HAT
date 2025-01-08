@@ -75,7 +75,20 @@
     3. .item() 못쓰게 해야함
     * [참고](https://jseobyun.tistory.com/578)
     * [netron](https://netron.app/)
+    4. 해결: prepare_for_onnx_export_() 사용하는 방식으로 수정
 
+4. `RuntimeError`: Cannot insert a Tensor that requires grad as a constant. Consider making it a parameter or input, or detaching the gradient
+    1. 
+    fairseq/modules/linear_super.py", line 58, in forward
+    return F.linear(x, self.samples['weight'], self.samples['bias'])
+    2. 
+    fairseq/modules/embedding_super.py", line 53, in forward
+    return F.embedding(input, self.sampled_weight(part), self.padding_idx, self.max_norm, self.norm_type, self.scale_grad_by_freq, self.sparse)
+    (self.sampled_weight(part) 데이터타입 문제)
+    3. 
+    fairseq/modules/embedding_super.py", line 52, in sampled_weight
+    return sampled_weight.detach().clone()
+    수정중
 
 </div>
 </details>

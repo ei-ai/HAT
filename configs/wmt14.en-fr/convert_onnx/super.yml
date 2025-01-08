@@ -1,13 +1,13 @@
 # model
-arch: transformersuper_wmt_en_de
+arch: transformersuper_wmt_en_fr
 share-all-embeddings: True
 max-tokens: 4096
-data: data/binary/wmt16_en_de
-source-lang: en
-target-lang: de
-src-dict-path: data/binary/wmt16_en_de/dict.en.txt
-tgt-dict-path: data/binary/wmt16_en_de/dict.de.txt
-model-path: downloaded_models/HAT_wmt16ende_super_space0.pt
+data: data/binary/wmt14_en_fr
+# source-lang: en
+# target-lang: fr
+# src-dict-path: data/binary/wmt14_en_fr/dict.en.txt
+# tgt-dict-path: data/binary/wmt14_en_fr/dict.fr.txt
+model-path: downloaded_models/HAT_wmt14enfr_super_space0.pt
 
 # training settings
 optimizer: adam
@@ -34,8 +34,8 @@ lr-shrink: 1
 
 # logging
 # keep-last-epochs: 20
-# save-interval: 10
-# validate-interval: 10
+# save-interval: 1
+# validate-interval: 1
 
 # SuperTransformer configs
 encoder-embed-dim: 640
