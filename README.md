@@ -180,10 +180,10 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python convert_rknn.py --dataset-name=[dataset_name]
     ```
     ```sh
-    python convert_rknn.py --dataset-name=wmt14ende
-    python convert_rknn.py --dataset-name=wmt14enfr
-    python convert_rknn.py --dataset-name=wmt19ende
-    python convert_rknn.py --dataset-name=iwslt14deen
+    python convert_rknn.py --dataset-name=wmt14_en_de
+    python convert_rknn.py --dataset-name=wmt14_en_fr
+    python convert_rknn.py --dataset-name=wmt19_en_de
+    python convert_rknn.py --dataset-name=iwslt14_de_en
     ```
 
 2. Evolutionary Search  

@@ -40,7 +40,6 @@ class EmbeddingSuper(nn.Embedding):
     def _sample_parameters(self, part):
         weight = self.weight[..., :self.sample_embed_dim[part]]
         self.samples[part]['weight'] = weight
-
         return self.samples
 
     def sample_parameters(self, part, resample=False):
@@ -48,12 +47,9 @@ class EmbeddingSuper(nn.Embedding):
 
     def sampled_weight(self, part):
         sampled_weight = self.sample_parameters(part)[part]['weight']
-        #if self.onnx_trace:
-        #    return sampled_weight.detach().clone()
         return sampled_weight
 
     def forward(self, input, part='encoder'):
-        print("self.sampled_weight(part)", self.sampled_weight(part))
         return F.embedding(input, self.sampled_weight(part), self.padding_idx, self.max_norm, self.norm_type, self.scale_grad_by_freq, self.sparse)
 
 

@@ -13,13 +13,11 @@ class WrapperModelONNX(torch.nn.Module):
         if hasattr(self.model, "prepare_for_onnx_export_"):
             self.model.prepare_for_onnx_export_()
 
-        #for param in self.model.parameters():
-        #    param.requires_grad = False
+        for param in self.model.parameters():
+            param.requires_grad = False
 
         for module in self.model.modules():
             module.onnx_trace = True
-            
 
-    def forward(self, *args, **kwargs):
-        return self.model(*args, **kwargs)
+
     

@@ -21,6 +21,7 @@ def generate_dummy_data(args):
     dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
     dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
 
+
     src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
     src_lengths_test = torch.tensor([dummy_sentence_length])
     prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
@@ -40,14 +41,10 @@ def export_to_onnx(model, src_tokens, src_lengths, prev_output_tokens, dataset_n
         (src_tokens, src_lengths, prev_output_tokens), 
         onnx_file_path,
         opset_version=14,
+        export_params=True,
         training=torch.onnx.TrainingMode.EVAL,
         input_names=["src_tokens", "src_lengths", "prev_output_tokens"],
         output_names=["output"],
-        dynamic_axes={
-            "src_tokens": {0: "batch_size", 1: "sequence_length"},
-            "prev_output_tokens": {0: "batch_size", 1: "sequence_length"},
-            "output": {0: "batch_size", 1: "sequence_length"},
-        }
     )
     print(f"| Saved \n| ONNX model path: {onnx_file_path}")
 
@@ -62,14 +59,11 @@ def main():
     model = task.build_model(args)
 
     src_tokens, src_lengths, prev_output_tokens = generate_dummy_data(args)
-    # src_tokens = src_tokens.detach()
-    # src_lengths = src_lengths.detach()
-    # prev_output_tokens = prev_output_tokens.detach()
 
-    config_sam = utils.sample_configs(utils.get_all_choices(args), reset_rand_seed=False, super_decoder_num_layer=args.decoder_layers)
-    model.set_sample_config(config_sam)
+    with torch.no_grad():
+        config_sam = utils.sample_configs(utils.get_all_choices(args), reset_rand_seed=False, super_decoder_num_layer=args.decoder_layers)
+        model.set_sample_config(config_sam)
     model.eval()
-
 
     print("| Exporting model to ONNX...")
     export_to_onnx(
@@ -77,7 +71,7 @@ def main():
         src_tokens, 
         src_lengths, 
         prev_output_tokens,
-        args.data.strip("data/binary/"))
+        args.data.lstrip("data/binary/"))
     
     print("| All set!")
 
