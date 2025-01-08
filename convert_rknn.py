@@ -1,8 +1,7 @@
 import os
-import torch
 import argparse
 from rknn.api import RKNN
-import onnx
+
 
 def export_to_rknn(onnx_model_path, rknn_model_path, dataset_name):
     os.makedirs(os.path.dirname(rknn_model_path), exist_ok=True)
@@ -41,20 +40,10 @@ def main():
     parser.add_argument("--dataset-name", required=True, help="Dataset name: [iwslt14deen|wmt14ende|wmt14enfr|wmt19ende]")
     args = parser.parse_args()
 
-    dataset_name = args.dataset_name
-    if dataset_name == "iwslt14deen":
-        dataset_name = "iwslt14_de_en"
-    elif dataset_name == "wmt14enfr":
-        dataset_name = "wmt14_en_fr"
-    elif dataset_name == "wmt14ende":
-        dataset_name = "wmt16_en_de"
-    elif dataset_name == "wmt19ende":
-        dataset_name = "wmt19_en_de"
-    else:
-        "| Invalid dataset"
-
-    onnx_model_path = f"./onnx_models/{dataset_name}.onnx"
-    rknn_model_path = f"./rknn_models/{dataset_name}/{dataset_name}.rknn"
+    onnx_model_path = f"./onnx_models/{args.dataset_name}.onnx"
+    if args.dataset_name == 'wmt14_en_de':
+        onnx_model_path = f"./onnx_models/wmt16_en_de.onnx"
+    rknn_model_path = f"./rknn_models/{args.dataset_name}/{args.dataset_name}.rknn"
 
     if not os.path.exists(onnx_model_path):
         print(f"ONNX model not found at {onnx_model_path}. Please ensure the ONNX model is available.")
@@ -63,7 +52,7 @@ def main():
     print(f"| Using ONNX model from {onnx_model_path}...")
 
     print("| Exporting model to RKNN...")
-    export_to_rknn(onnx_model_path, rknn_model_path, dataset_name)
+    export_to_rknn(onnx_model_path, rknn_model_path, args.dataset_name)
     print("| all set!")
 
 
