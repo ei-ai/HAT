@@ -4,14 +4,85 @@
 # Paper: https://arxiv.org/abs/2005.14187
 # Project page: https://hanruiwang.me/project_pages/hat/
 
+# 생각해보니까 이거 npu에서 돌리려면 gpu, cpu 관련된건 다 날려야 하지 않나, torch는 변환 안돼잖아
+# npu 명령 부분만 알아들을 수 있는 라이브러리 쓰면 되나?
+
 import torch
 import time
 import pdb
 
 import numpy as np
 
-from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
+from fairseq import checkpoint_utils, distributed_utils, npu_utils, options, tasks, utils # npu_utils 뺄까
 from tqdm import tqdm
+from rknn.api import RKNN
+from rknn.api import RKNNLite
+
+class RKNNEncoder:
+    def __init__(self, encoder_rknn_path):
+        self.encoder_rknn = RKNNLite()
+        print('--> Load RKNN Encoder model')
+        ret = self.encoder_rknn.load_rknn(encoder_rknn_path)
+        if ret != 0:
+            raise RuntimeError("Failed to load RKNN encoder model.")
+
+    def forward(self, src_tokens, src_lengths):
+        inputs = self._prepare_encoder_inputs(src_tokens, src_lengths)
+        outputs = self.encoder_rknn.inference(inputs=inputs)
+        return torch.tensor(outputs[0])
+
+    def reorder_encoder_out(self, encoder_out, new_order):
+        # 동일 기능 구현
+        return encoder_out.index_select(0, new_order)
+
+    def _prepare_encoder_inputs(self, src_tokens, src_lengths):
+        return [src_tokens.numpy(), src_lengths.numpy()]
+
+
+class RKNNDecoder:
+    def __init__(self, decoder_rknn_path):
+        self.decoder_rknn = RKNNLite()
+        print('--> Load RKNN Decoder model')
+        ret = self.decoder_rknn.load_rknn(decoder_rknn_path)
+        if ret != 0:
+            raise RuntimeError("Failed to load RKNN decoder model.")
+
+    def forward(self, prev_output_tokens, encoder_outputs):
+        inputs = self._prepare_decoder_inputs(prev_output_tokens, encoder_outputs)
+        outputs = self.decoder_rknn.inference(inputs=inputs)
+        return torch.tensor(outputs[0])
+
+    def _prepare_decoder_inputs(self, prev_output_tokens, encoder_outputs):
+        return [prev_output_tokens.numpy(), encoder_outputs.numpy()]
+
+class RKNNModelWrapper(torch.nn.Module):
+    def __init__(self, rknn_path, encoder_rknn_path, decoder_rknn_path): # 모델과 주소 연결
+        super().__init__()
+        self.rknn_lite = RKNNLite()
+        
+        ret = self.rknn_lite.rknn.load_rknn(rknn_path)
+        if ret != 0:
+            print('Load RKNN model failed')
+            exit(ret)
+        print('--> Load RKNN model')
+            
+        self.encoder = RKNNEncoder(encoder_rknn_path)
+        self.decoder = RKNNDecoder(decoder_rknn_path)
+    
+    def npu(self): # 모델 초기화, 사실상 돌리는건 인코더 디코더라 걔네를 초기화 시켜야 하는거 아닌가
+        ret = self.rknn_lite.rknn.init_runtime()
+        if ret != 0:
+            print('Init runtime failed')
+            exit(ret)
+        
+    def set_sample_config(config_sam):
+        # 동일 기능 구현 
+        print()
+    
+    def forward(self, src_tokens, src_lengths, prev_output_tokens):
+        # input = rknn 모델 입력으로 변환 필요 
+        outputs = rknn_lite.inference(inputs=inputs)
+        return torch.tensor(outputs[0])
 
 
 def main(args):
@@ -33,9 +104,7 @@ def main(args):
 
     # Build model
     if args.latnpu:
-        # model = rknn 모델을 참조하도록 세팅
-        # rknn toolkit 사용
-        # convert_rknn.py에 있는 경로명 참고
+        model = RKNNModelWrapper(args.lat_model_path, args.lat_modelEnc_path, args.lat_modelDec_path) # 인코더, 디코더 주소 추가 방법 고민중중
     else:
         model = task.build_model(args)
     print(model)
@@ -52,12 +121,13 @@ def main(args):
 
     dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
     dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
-
+    
     # for latency predictor: latency dataset generation
     with open(args.lat_dataset_path, 'w') as fid:
         src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
         src_lengths_test = torch.tensor([dummy_sentence_length])
         prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
+        
         if args.latcpu:
             model.cpu()
             print('Measuring model latency on CPU for dataset generation...')
@@ -70,6 +140,8 @@ def main(args):
             print('Measuring model latency on GPU for dataset generation...')
             start = torch.cuda.Event(enable_timing=True)
             end = torch.cuda.Event(enable_timing=True)
+        elif args.latnpu:
+            model.npu() # 모델 초기화화
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -182,10 +254,19 @@ def cli_main():
     parser.add_argument('--lat-dataset-path', type=str, default='./latency_dataset/lat.tmp', help='the path to write latency dataset')
     parser.add_argument('--lat-dataset-size', type=int, default=200, help='number of data points for the dataset')
 
+    parser.add_argument('--lat-model-path', type=str, help='the path to get rknn model path')
+    parser.add_argument('--lat-modelEnc-path', type=str, help='the path to get rknn model path')
+    parser.add_argument('--lat-modelDec-path', type=str, help='the path to get rknn model path')
+    
     options.add_generation_args(parser)
 
     args = options.parse_args_and_arch(parser)
 
+    # npu를 사용할 시, super를 rknn으로 변환한 모델 위치, 인코더 위치, 디코더 위치치를 입력 받도록 함
+    if args.latnpu and (not args.lat_model_path or not args.lat_modelEnc_path or not args.lat_modelDec_path):
+        print("Error: --latnpu requires --lat-model-path, --lat-modelEnc-path, and --lat-modelDec-path to be specified.")
+
+    
     if args.latcpu:
         args.cpu = True
         args.fp16 = False
