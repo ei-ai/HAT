@@ -5,7 +5,7 @@ from rknn.api import RKNN
 
 def export_to_rknn(onnx_model_path, rknn_model_path, dataset_name):
     os.makedirs(os.path.dirname(rknn_model_path), exist_ok=True)
-    rknn = RKNN(verbose=True, verbose_file=f'./rknn_models/{dataset_name}/rknn_build_{dataset_name}.log')
+    rknn = RKNN(verbose=False, verbose_file=f'./rknn_models/{dataset_name}/rknn_build_{dataset_name}.log')
 
     print('| --> Configuring RKNN model')
     rknn.config(target_platform='rk3588')

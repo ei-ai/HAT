@@ -167,23 +167,23 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     convert supertransformer   
     onnx  
     ```sh
-    python convert_onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml
+    python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml
     ```
     ```sh
-    python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml
-    python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml
-    python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
-    python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml
+    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml
+    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
+    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
     ```
     rknn  
     ```sh
-    python convert_rknn.py --dataset-name=[dataset_name]
+    python convert2rknn.py --dataset-name=[dataset_name]
     ```
     ```sh
-    python convert_rknn.py --dataset-name=wmt14_en_de
-    python convert_rknn.py --dataset-name=wmt14_en_fr
-    python convert_rknn.py --dataset-name=wmt19_en_de
-    python convert_rknn.py --dataset-name=iwslt14_de_en
+    python convert2rknn.py --dataset-name=wmt14_en_de
+    python convert2rknn.py --dataset-name=wmt14_en_fr
+    python convert2rknn.py --dataset-name=wmt19_en_de
+    python convert2rknn.py --dataset-name=iwslt14_de_en
     ```
 
 2. Evolutionary Search  

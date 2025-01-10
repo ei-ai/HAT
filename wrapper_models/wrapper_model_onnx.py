@@ -1,8 +1,4 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from fairseq.models import fairseq_model
-from fairseq.models.transformer_super import TransformerSuperModel
 
 class WrapperModelONNX(torch.nn.Module):
     def __init__(self, model):
@@ -17,7 +13,11 @@ class WrapperModelONNX(torch.nn.Module):
             param.requires_grad = False
 
         for module in self.model.modules():
-            module.onnx_trace = True
-
-
-    
+            if hasattr(module, 'onnx_trace'):
+                module.onnx_trace = True
+                
+            if hasattr(module, 'weights') and hasattr(module, 'padding_idx'):
+                module.weights = torch.nn.Parameter(module.weights)
+                
+    def forward(self, *args, **kwargs):
+        return self.model(*args, **kwargs)

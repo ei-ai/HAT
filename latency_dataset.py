@@ -14,76 +14,8 @@ import pdb
 import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, npu_utils, options, tasks, utils # npu_utils 뺄까
+from wrapper_models import wrapper_model_rknn
 from tqdm import tqdm
-from rknn.api import RKNN
-from rknn.api import RKNNLite
-
-class RKNNEncoder:
-    def __init__(self, encoder_rknn_path):
-        self.encoder_rknn = RKNNLite()
-        print('--> Load RKNN Encoder model')
-        ret = self.encoder_rknn.load_rknn(encoder_rknn_path)
-        if ret != 0:
-            raise RuntimeError("Failed to load RKNN encoder model.")
-
-    def forward(self, src_tokens, src_lengths):
-        inputs = self._prepare_encoder_inputs(src_tokens, src_lengths)
-        outputs = self.encoder_rknn.inference(inputs=inputs)
-        return torch.tensor(outputs[0])
-
-    def reorder_encoder_out(self, encoder_out, new_order):
-        # 동일 기능 구현
-        return encoder_out.index_select(0, new_order)
-
-    def _prepare_encoder_inputs(self, src_tokens, src_lengths):
-        return [src_tokens.numpy(), src_lengths.numpy()]
-
-
-class RKNNDecoder:
-    def __init__(self, decoder_rknn_path):
-        self.decoder_rknn = RKNNLite()
-        print('--> Load RKNN Decoder model')
-        ret = self.decoder_rknn.load_rknn(decoder_rknn_path)
-        if ret != 0:
-            raise RuntimeError("Failed to load RKNN decoder model.")
-
-    def forward(self, prev_output_tokens, encoder_outputs):
-        inputs = self._prepare_decoder_inputs(prev_output_tokens, encoder_outputs)
-        outputs = self.decoder_rknn.inference(inputs=inputs)
-        return torch.tensor(outputs[0])
-
-    def _prepare_decoder_inputs(self, prev_output_tokens, encoder_outputs):
-        return [prev_output_tokens.numpy(), encoder_outputs.numpy()]
-
-class RKNNModelWrapper(torch.nn.Module):
-    def __init__(self, rknn_path, encoder_rknn_path, decoder_rknn_path): # 모델과 주소 연결
-        super().__init__()
-        self.rknn_lite = RKNNLite()
-        
-        ret = self.rknn_lite.rknn.load_rknn(rknn_path)
-        if ret != 0:
-            print('Load RKNN model failed')
-            exit(ret)
-        print('--> Load RKNN model')
-            
-        self.encoder = RKNNEncoder(encoder_rknn_path)
-        self.decoder = RKNNDecoder(decoder_rknn_path)
-    
-    def npu(self): # 모델 초기화, 사실상 돌리는건 인코더 디코더라 걔네를 초기화 시켜야 하는거 아닌가
-        ret = self.rknn_lite.rknn.init_runtime()
-        if ret != 0:
-            print('Init runtime failed')
-            exit(ret)
-        
-    def set_sample_config(config_sam):
-        # 동일 기능 구현 
-        print()
-    
-    def forward(self, src_tokens, src_lengths, prev_output_tokens):
-        # input = rknn 모델 입력으로 변환 필요 
-        outputs = rknn_lite.inference(inputs=inputs)
-        return torch.tensor(outputs[0])
-
 
 def main(args):
     utils.import_user_module(args)
@@ -103,10 +35,9 @@ def main(args):
     task = tasks.setup_task(args)
 
     # Build model
+    model = task.build_model(args)
     if args.latnpu:
-        model = RKNNModelWrapper(args.lat_model_path, args.lat_modelEnc_path, args.lat_modelDec_path) # 인코더, 디코더 주소 추가 방법 고민중중
-    else:
-        model = task.build_model(args)
+        model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('/data/binary/'))
     print(model)
 
     # specify the length of the dummy input for profile
