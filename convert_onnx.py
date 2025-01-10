@@ -1,11 +1,7 @@
 import os
 import torch
-import argparse
 from fairseq import tasks, options, utils
-from fairseq.data import Dictionary, indexed_dataset
-from fairseq.models import fairseq_model
-from fairseq.models.transformer_super import TransformerSuperModel
-from wrapperModels import WrapperModelONNX
+from wrapper_models import wrapper_model_onnx
 
 def generate_dummy_data(args):
     # specify the length of the dummy input for profile
@@ -29,7 +25,7 @@ def generate_dummy_data(args):
 
 
 def export_to_onnx(model, args):
-    wrapper_model = WrapperModelONNX(model)
+    wrapper_model = wrapper_model_onnx.WrapperModelONNX(model)
     wrapper_model.prepare_for_onnx_export()
 
     src_tokens, src_lengths, prev_output_tokens = generate_dummy_data(args)

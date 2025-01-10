@@ -1,29 +1,5 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from rknn.api import RKNN
 from rknn.api import RKNNLite
-from fairseq.models import fairseq_model
-from fairseq.models.transformer_super import TransformerSuperModel
-
-class WrapperModelONNX(torch.nn.Module):
-    def __init__(self, model):
-        super(WrapperModelONNX, self).__init__()
-        self.model = model
-
-    def prepare_for_onnx_export(self):
-        if hasattr(self.model, "prepare_for_onnx_export_"):
-            self.model.prepare_for_onnx_export_()
-
-        for param in self.model.parameters():
-            param.requires_grad = False
-
-        for module in self.model.modules():
-            if hasattr(module, 'onnx_trace'):
-                module.onnx_trace = True
-                
-    def forward(self, *args, **kwargs):
-        return self.model(*args, **kwargs)
 
 class RKNNEncoder:
     def __init__(self, encoder_rknn_path):
@@ -62,6 +38,7 @@ class RKNNDecoder:
     def _prepare_decoder_inputs(self, prev_output_tokens, encoder_outputs):
         return [prev_output_tokens.numpy(), encoder_outputs.numpy()]
 
+
 class WrapperModelRKNN(torch.nn.Module):
     def __init__(self, model, datset_name):
         super(WrapperModelRKNN, self).__init__()
@@ -94,3 +71,4 @@ class WrapperModelRKNN(torch.nn.Module):
         # input = rknn 모델 입력으로 변환 필요 
         outputs = self.rknn_lite.inference(inputs=inputs)
         return torch.tensor(outputs[0])
+

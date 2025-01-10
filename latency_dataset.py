@@ -14,7 +14,7 @@ import pdb
 import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, npu_utils, options, tasks, utils # npu_utils 뺄까
-from wrapperModels import WrapperModelRKNN
+from wrapper_models import wrapper_model_rknn
 from tqdm import tqdm
 
 def main(args):
@@ -37,7 +37,7 @@ def main(args):
     # Build model
     model = task.build_model(args)
     if args.latnpu:
-        model = WrapperModelRKNN(model, args.data.removeprefix('/data/binary/'))
+        model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('/data/binary/'))
     print(model)
 
     # specify the length of the dummy input for profile
