@@ -17,7 +17,10 @@ class WrapperModelONNX(torch.nn.Module):
             param.requires_grad = False
 
         for module in self.model.modules():
-            module.onnx_trace = True
-
+            if hasattr(module, 'onnx_trace'):
+                module.onnx_trace = True
+                
+    def forward(self, *args, **kwargs):
+        return self.model(*args, **kwargs)
 
     

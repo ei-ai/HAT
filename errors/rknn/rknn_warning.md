@@ -82,7 +82,20 @@ No lowering found for: /decoder/embed_positions/CumSum, node type = CumSum, use 
 # iwslt14_de_en
 `python convert_rknn.py --dataset-name=iwslt14_de_en`
 `python convert_rknn.py --dataset-name=iwslt14_de_en > ./errors/rknn/convert_rknn_iwslt14.de-en.txt 2>&1`
+  
+I Loading : 100%|█████████████████████████████████████████████████| 29/29 [00:00<00:00, 2495.69it/s]
+[1;33mW[0m [1;33mbuild: For tensor ['/model/decoder/layers.0/self_attn/Tile_output_0'], the value smaller than -3e+38 has been corrected to -10000. Set opt_level to 2 or lower to disable this correction.[0m
+[1;33mW[0m [1;33mbuild: For tensor ['/model/decoder/layers.1/self_attn/Tile_output_0'], the value smaller than -3e+38 has been corrected to -10000. Set opt_level to 2 or lower to disable this correction.[0m
+[1;33mW[0m [1;33mbuild: For tensor ['/model/decoder/layers.2/self_attn/Tile_output_0'], the value smaller than -3e+38 has been corrected to -10000. Set opt_level to 2 or lower to disable this correction.[0m
+[1;33mW[0m [1;33mbuild: For tensor ['/model/decoder/layers.3/self_attn/Tile_output_0'], the value smaller than -3e+38 has been corrected to -10000. Set opt_level to 2 or lower to disable this correction.[0m
+[1;33mW[0m [1;33mbuild: For tensor ['/model/decoder/layers.4/self_attn/Tile_output_0'], the value smaller than -3e+38 has been corrected to -10000. Set opt_level to 2 or lower to disable this correction.[0m
+| done
+I rknn building ...
+E RKNN: [17:58:14.673] dataconvert type -1 is unsupport in current!
+E RKNN: [17:58:14.673] dataconvert type -1 is unsupport in current!
+I rknn building done.
+No lowering found for: /model/encoder/embed_positions/CumSum, node type = CumSum, use CustomOperatorLower instead.
+No lowering found for: /model/decoder/embed_positions/CumSum, node type = CumSum, use CustomOperatorLower instead.
 
-    
 [맨위로](#contents)
     
