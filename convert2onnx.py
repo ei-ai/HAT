@@ -30,7 +30,10 @@ def export_to_onnx(model, args):
 
     src_tokens, src_lengths, prev_output_tokens = generate_dummy_data(args)
 
-    onnx_file_path = f"./onnx_models/{args.data.removeprefix('data/binary/')}.onnx"
+    if args.train_subtransformer:
+        onnx_file_path = f"./onnx_models/{args.sub_model_name}.onnx"
+    else:
+        onnx_file_path = f"./onnx_models/{args.data.removeprefix('data/binary/')}.onnx"
     os.makedirs(os.path.dirname(onnx_file_path), exist_ok=True)
 
     torch.onnx.export(
@@ -60,7 +63,12 @@ def main():
         model.set_sample_config(config_sam)
     model.eval()
 
-    print("| Exporting model to ONNX...")
+    if args.train_subtransformer:
+        print(" \n\n| Exporting SubTransformer model to ONNX...\n\n")
+        print(f"| SubTransformer Arch: {utils.get_subtransformer_config(args)} \n")
+    else:
+        print(" \n\n| Exporting SuperTransformer model to ONNX...\n\n")
+        print(f"| SuperTransformer Arch: {model} \n")
     export_to_onnx(model, args)
     
     print("| All set!")

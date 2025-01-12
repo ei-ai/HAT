@@ -3,9 +3,11 @@
 
 ## Contents
 * [수정한 부분](#수정한-부분)  
-* [실행 및 세팅](#실행-및-세팅)  
+* [실행](#실행)  
   * [Data Preparation](#data-preparation)  
-  * [Training](#training)  
+  * [Trainin a SuperTransformer](#train-a-supertransformer)  
+  * [Evolutionary Search](#evolutionary-search)
+  * [Train a SubTransformer](#train-a-supertransformer)
   * [Testing](#testing)  
 
 
@@ -13,8 +15,7 @@
 ## 수정한 부분
 [errors](https://github.com/ei-ai/HAT/tree/main/errors) 참고
 
-## 실행 및 세팅
-### Dependencies
+## Dependencies
 <details>
 <summary> MacOS </summary>
 <div markdown=1>
@@ -131,7 +132,7 @@
 </details>
 
 
-
+## 실행 
 ### Data Preparation
 ```sh
 bash configs/[task_name]/get_preprocessed.sh
@@ -144,8 +145,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 ```
 
 
-### Training
-1. Train a supertransformer
+### Train a SuperTransformer
+1. Train a model
     * train
     ```sh
     python train.py --configs=configs/wmt14.en-de/supertransformer/space0.yml
@@ -163,9 +164,9 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python download_model.py --model-name=HAT_wmt19ende_super_space0
     python download_model.py --model-name=HAT_iwslt14deen_super_space1
     ```
-    * convert(수정중)    
-    convert supertransformer   
-    onnx  
+
+2. Convert a model    
+    * `.pt` to `.onnx`
     ```sh
     python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml
     ```
@@ -175,23 +176,24 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
     ```
-    rknn  
+    * `.onnx` to `.rknn`
     ```sh
-    python convert2rknn.py --dataset-name=[dataset_name]
+    python convert2rknn.py --onnx-name=[model_name]
     ```
     ```sh
-    python convert2rknn.py --dataset-name=wmt14_en_de
-    python convert2rknn.py --dataset-name=wmt14_en_fr
-    python convert2rknn.py --dataset-name=wmt19_en_de
-    python convert2rknn.py --dataset-name=iwslt14_de_en
+    python convert2rknn.py --onnx-name=wmt14_en_de
+    python convert2rknn.py --onnx-name=wmt14_en_fr
+    python convert2rknn.py --onnx-name=wmt19_en_de
+    python convert2rknn.py --onnx-name=iwslt14_de_en
     ```
 
-2. Evolutionary Search  
-    2.1 Generate a latency dataset
+
+### Evolutionary Search  
+1.  Generate a latency dataset
     ```sh
     python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
     ```
-    2.2 Train a latency predictor
+2. Train a latency predictor
     ```sh
     python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
     ```
@@ -201,7 +203,7 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/npu.yml
     python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml
     ```
-    2.3 Run evolutionary search with a latency constraint  
+3. Run evolutionary search with a latency constraint  
     ```sh
     python evo_search.py --configs=[supertransformer_config_file].yml --evo-configs=[evo_settings].yml
     ```
@@ -212,8 +214,28 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python evo_search.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml --evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml
     ```
 
-4. Train a Searched SubTransformer
 
+### Train a Searched SubTransformer
+1. Train a Model
+    * train
+    ```sh
+    python train.py --configs=[subtransformer_architecture].yml --sub-configs=configs/[task_name]/subtransformer/common.yml
+    ```
+2. Convert a Model
+    * `.pt` to `.onnx`
+    ```sh
+    python convert2onnx.py --configs=[subtransformer_architecture].yml --sub-configs==configs/[task_name]/convert_onnx/common.yml
+    ```
+    ```sh
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/common.yml --sub-configs=configs/wmt14.en-de/convert_onnx/HAT_wmt14ende_xeon@204.2ms_bleu@27.6.yml
+    ```
+    * `.onnx` to `.rknn`
+    ```sh
+    python convert2rknn.py --onnx-name=[model_name]
+    ```
+    ```sh
+    python convert2rknn.py --onnx-name=HAT_wmt14ende_xeon@204.2ms_bleu@27.6
+    ```
 
 
 ### Testing

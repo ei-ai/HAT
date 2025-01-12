@@ -1,0 +1,29 @@
+models:
+ # model output name
+ name: object_detection
+ # Original model framework
+ platform: onnx
+ # Model input file path
+ model_file_path: onnx_models/wmt16_en_de.onnx
+ # Describe information such as input and output shapes
+#  subgraphs:
+#  # model input tensor shape
+#  input_size_list:
+#  # input tensor name
+#  inputs:
+#  # output tensor name
+#  outputs:
+#  # quantification flag
+ quantize: false
+#  # Quantify dataset file path (relative yml path)
+#  dataset: ./dataset.txt
+ configs:
+  target_platform: rk3588
+  # rknn.config mean_values
+  mean_values: [127.5,127.5,127.5]
+  # rknn.config std_values
+  std_values: [128.0,128.0,128.0]
+  # rknn.config quant_img_RGB2BGR
+  quant_img_RGB2BGR: false
+  # rknn.config quantized_algoritm
+  quantized_algorithm: normal

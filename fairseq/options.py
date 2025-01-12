@@ -16,6 +16,10 @@ def get_converting_parser(default_task='translation'):
     parser = get_parser('Converting', default_task)
     add_dataset_args(parser, convert=True)
     add_model_args(parser)
+    parser.add_argument('--train-subtransformer', action='store_true', default=False, help='whether convert SuperTransformer or SubTransformer')
+    parser.add_argument('--sub-configs', required=False, is_config_file=True, help='when converting SubTransformer, use --configs to specify architecture and --sub-configs to specify other settings')
+    parser.add_argument('--sub-model-name', required=False, is_config_file=True, help='when converting SubTransformer, use --configs to specify architecture and --sub-configs to specify other settings')
+
     return parser
 
 def get_preprocessing_parser(default_task='translation'):
