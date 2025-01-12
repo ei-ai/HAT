@@ -1,0 +1,19 @@
+sub-model-name: HAT_wmt14ende_xeon@204.2ms_bleu@27.6
+# 제대로 돌아가는지 확인용 
+
+encoder-embed-dim-subtransformer: 512
+decoder-embed-dim-subtransformer: 512
+
+encoder-ffn-embed-dim-all-subtransformer: [3072, 3072, 3072, 3072, 3072, 3072]
+decoder-ffn-embed-dim-all-subtransformer: [3072, 3072]
+
+encoder-layer-num-subtransformer: 6
+decoder-layer-num-subtransformer: 2
+
+encoder-self-attention-heads-all-subtransformer: [4, 8, 8, 4, 8, 8]
+decoder-self-attention-heads-all-subtransformer: [8, 8]
+decoder-ende-attention-heads-all-subtransformer: [8, 8]
+
+# for arbitrary encoder decoder attention. -1 means attending to last one encoder layer
+# 1 means last two encoder layers, 2 means last three encoder layers
+decoder-arbitrary-ende-attn-all-subtransformer: [-1, 1]

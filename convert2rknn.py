@@ -1,11 +1,13 @@
 import os
 import argparse
 from rknn.api import RKNN
+# https://github.com/rockchip-linux/rknn-toolkit2/blob/master/doc/02_Rockchip_RKNPU_User_Guide_RKNN_SDK_V1.6.0_EN.pdf
+# 25페이지부터 나오는 방식 사용(3.1.1~3.1.5), 3.1.6도 시도해 봤는데 쉽지 않아서 그냥 이 방법 사용 
 
 
-def export_to_rknn(onnx_model_path, rknn_model_path, dataset_name):
+def export_to_rknn(onnx_model_path, rknn_model_path, onnx_name):
     os.makedirs(os.path.dirname(rknn_model_path), exist_ok=True)
-    rknn = RKNN(verbose=False, verbose_file=f'./rknn_models/{dataset_name}/rknn_build_{dataset_name}.log')
+    rknn = RKNN(verbose=False, verbose_file=f'./rknn_models/{onnx_name}/rknn_build_{onnx_name}.log')
 
     print('| --> Configuring RKNN model')
     rknn.config(target_platform='rk3588')
@@ -34,16 +36,18 @@ def export_to_rknn(onnx_model_path, rknn_model_path, dataset_name):
 
     print(f"| RKNN model has been successfully exported to {rknn_model_path}")
 
+    rknn.release()
+
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset-name", required=True, help="Dataset name: [iwslt14deen|wmt14ende|wmt14enfr|wmt19ende]")
+    parser.add_argument("--onnx-name", required=True, help="ONNX model name")
     args = parser.parse_args()
 
-    onnx_model_path = f"./onnx_models/{args.dataset_name}.onnx"
-    if args.dataset_name == 'wmt14_en_de':
+    onnx_model_path = f"./onnx_models/{args.onnx_name}.onnx"
+    if args.onnx_name == 'wmt14_en_de':
         onnx_model_path = f"./onnx_models/wmt16_en_de.onnx"
-    rknn_model_path = f"./rknn_models/{args.dataset_name}/{args.dataset_name}.rknn"
+    rknn_model_path = f"./rknn_models/{args.onnx_name}/{args.onnx_name}.rknn"
 
     if not os.path.exists(onnx_model_path):
         print(f"ONNX model not found at {onnx_model_path}. Please ensure the ONNX model is available.")
@@ -52,7 +56,7 @@ def main():
     print(f"| Using ONNX model from {onnx_model_path}...")
 
     print("| Exporting model to RKNN...")
-    export_to_rknn(onnx_model_path, rknn_model_path, args.dataset_name)
+    export_to_rknn(onnx_model_path, rknn_model_path, args.onnx_name)
     print("| all set!")
 
 

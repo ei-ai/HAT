@@ -1,0 +1,92 @@
+python -m rknn.api.rknn_convert -t rk3588 -i ./configs/wmt14.en-de/convert_onnx/super.yml -o ./rknn_models/wmt14.en-de/wmt14.en-de-test.rknn
+python -m rknn.api.rknn_convert -t rk3588 -i ./configs/wmt14.en-de/supertransformer/space0.yml -o ./rknn_models/wmt14.en-de/wmt14.en-de-test.rknn
+
+
+=========================================
+convert_model:
+  config_path=./super.yml
+  config_dir=/home/mk/git/HAT
+  out_path=./rknn_models/wmt14.en-de/wmt14.en-de-test.rknn
+  target_platform=rk3588
+=========================================
+models:
+ # model output name
+ name: object_detection
+ # Original model framework
+ platform: onnx
+ # Model input file path
+ model_file_path: onnx_models/wmt16_en_de.onnx
+ # Describe information such as input and output shapes
+#  subgraphs:
+#  # model input tensor shape
+#  input_size_list:
+#  # input tensor name
+#  inputs:
+#  # output tensor name
+#  outputs:
+#  # quantification flag
+ quantize: false
+#  # Quantify dataset file path (relative yml path)
+#  dataset: ./dataset.txt
+ configs:
+  target_platform: rk3588
+  # rknn.config mean_values
+  mean_values: [127.5,127.5,127.5]
+  # rknn.config std_values
+  std_values: [128.0,128.0,128.0]
+  # rknn.config quant_img_RGB2BGR
+  quant_img_RGB2BGR: false
+  # rknn.config quantized_algoritm
+  quantized_algorithm: normal
+=========================================
+I rknn-toolkit2 version: 2.3.0
+mean_values:[127.5, 127.5, 127.5]
+std_values:[128.0, 128.0, 128.0]
+quant_img_RGB2BGR: False
+quantize: False
+quantized_dtype: asymmetric_quantized-8
+quantized_algorithm: normal
+target_platform: rk3588
+quantized_method: channel
+optimization_level: 3
+I Loading : 100%|█████████████████████████████████████████████████| 17/17 [00:00<00:00, 2460.60it/s]
+E load_onnx: The len of mean_values ([127.5, 127.5, 127.5]) for input 0 is wrong, expect 30!
+I ===================== WARN(0) =====================
+E rknn-toolkit2 version: 2.3.0
+E load_onnx: Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 1534, in rknn.api.rknn_base.RKNNBase.load_onnx
+  File "rknn/api/rknn_base.py", line 723, in rknn.api.rknn_base.RKNNBase._create_ir_and_inputs_meta
+  File "rknn/api/rknn_log.py", line 95, in rknn.api.rknn_log.RKNNLog.e
+ValueError: The len of mean_values ([127.5, 127.5, 127.5]) for input 0 is wrong, expect 30!
+
+I ===================== WARN(0) =====================
+E rknn-toolkit2 version: 2.3.0
+Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 1534, in rknn.api.rknn_base.RKNNBase.load_onnx
+  File "rknn/api/rknn_base.py", line 723, in rknn.api.rknn_base.RKNNBase._create_ir_and_inputs_meta
+  File "rknn/api/rknn_log.py", line 95, in rknn.api.rknn_log.RKNNLog.e
+ValueError: The len of mean_values ([127.5, 127.5, 127.5]) for input 0 is wrong, expect 30!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/mk/miniconda3/envs/rknn/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/mk/miniconda3/envs/rknn/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/mk/miniconda3/envs/rknn/lib/python3.9/site-packages/rknn/api/rknn_convert.py", line 407, in <module>
+    convert_model(config_path=input_path,
+  File "/home/mk/miniconda3/envs/rknn/lib/python3.9/site-packages/rknn/api/rknn_convert.py", line 242, in convert_model
+    rknn.load_onnx(model=model_file_path, inputs=inputs,
+  File "/home/mk/miniconda3/envs/rknn/lib/python3.9/site-packages/rknn/api/rknn.py", line 163, in load_onnx
+    return self.rknn_base.load_onnx(model, inputs, input_size_list, input_initial_val, outputs)
+  File "rknn/api/rknn_log.py", line 349, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_log.py", line 95, in rknn.api.rknn_log.RKNNLog.e
+ValueError: Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 1534, in rknn.api.rknn_base.RKNNBase.load_onnx
+  File "rknn/api/rknn_base.py", line 723, in rknn.api.rknn_base.RKNNBase._create_ir_and_inputs_meta
+  File "rknn/api/rknn_log.py", line 95, in rknn.api.rknn_log.RKNNLog.e
+ValueError: The len of mean_values ([127.5, 127.5, 127.5]) for input 0 is wrong, expect 30!
