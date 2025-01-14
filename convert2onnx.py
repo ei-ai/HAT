@@ -1,5 +1,6 @@
 import os
 import torch
+import onnx
 from fairseq import tasks, options, utils
 from wrapper_models import wrapper_model_onnx
 
@@ -48,6 +49,9 @@ def export_to_onnx(model, args):
         output_names=["output"],
     )
     print(f"| Saved \n| ONNX model path: {onnx_file_path}")
+    # onnx_model = onnx.load(onnx_file_path)
+    # onnx.checker.check_model(onnx_model)
+    # print(onnx.helper.printable_graph(onnx_model.graph))
 
 
 def main():
