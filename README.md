@@ -168,23 +168,43 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 2. Convert a model    
     * `.pt` to `.onnx`
     ```sh
-    python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml
+    python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml [--enc|--dec]
     ```
     ```sh
     python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
+    
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml --enc
+    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml --enc
+    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml --enc
+    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml --enc
+
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml --dec
+    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml --dec
+    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml --dec
+    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml --dec
     ```
     * `.onnx` to `.rknn`
     ```sh
-    python convert2rknn.py --onnx-name=[model_name]
+    python convert2rknn.py --onnx-name=[model_name] [--enc|--dec]
     ```
     ```sh
     python convert2rknn.py --onnx-name=wmt14_en_de
     python convert2rknn.py --onnx-name=wmt14_en_fr
     python convert2rknn.py --onnx-name=wmt19_en_de
     python convert2rknn.py --onnx-name=iwslt14_de_en
+
+    python convert2rknn.py --onnx-name=wmt14_en_de --enc
+    python convert2rknn.py --onnx-name=wmt14_en_fr --enc
+    python convert2rknn.py --onnx-name=wmt19_en_de --enc
+    python convert2rknn.py --onnx-name=iwslt14_de_en --enc
+
+    python convert2rknn.py --onnx-name=wmt14_en_de --dec
+    python convert2rknn.py --onnx-name=wmt14_en_fr --dec
+    python convert2rknn.py --onnx-name=wmt19_en_de --dec
+    python convert2rknn.py --onnx-name=iwslt14_de_en --dec
     ```
 
 
