@@ -1,7 +1,19 @@
 import os
 import torch
+import onnx
+from onnxsim import simplify
 from fairseq import tasks, options, utils
 from wrapper_models import wrapper_model_onnx
+
+def simplify_onnx(onnx_file_path):
+    model = onnx.load(onnx_file_path)
+    simplified_model, check = simplify(model)
+    if check:
+        onnx_file_path = onnx_file_path[0:-5] + "_sim.onnx"
+        onnx.save(simplified_model, onnx_file_path)
+        print("| ONNX model simplified")
+    else:
+        print("| ONNX model could not simplified")
 
 def generate_dummy_data(args):
     # specify the length of the dummy input for profile
@@ -25,29 +37,68 @@ def generate_dummy_data(args):
 
 
 def export_to_onnx(model, args):
-    wrapper_model = wrapper_model_onnx.WrapperModelONNX(model)
-    wrapper_model.prepare_for_onnx_export()
-
-    src_tokens, src_lengths, prev_output_tokens = generate_dummy_data(args)
-
     if args.train_subtransformer:
-        onnx_file_path = f"./onnx_models/{args.sub_model_name}.onnx"
+        onnx_file_path = f"./onnx_models/{args.sub_model_name}"
     else:
-        onnx_file_path = f"./onnx_models/{args.data.removeprefix('data/binary/')}.onnx"
+        onnx_file_path = f"./onnx_models/{args.data.removeprefix('data/binary/')}"
+
+    if args.enc:
+        onnx_file_path += "_enc.onnx"
+    elif args.dec:
+        onnx_file_path += "_dec.onnx"
+    else:
+        onnx_file_path += ".onnx"
+
     os.makedirs(os.path.dirname(onnx_file_path), exist_ok=True)
 
+    src_tokens, src_lengths, prev_output_tokens = generate_dummy_data(args)
+    inputs, input_names, output_names = None, None, None
+
+    if args.enc:
+        model = model.encoder
+        print(f"| Encoder Arch: {model} \n")
+        inputs = (src_tokens, src_lengths)
+        input_names = ["src_tokens", "src_lengths"]
+        output_names = ["encoder_output"]
+
+    elif args.dec:
+        encoder_out_test = model.encoder(src_tokens, src_lengths) if model.encoder else {"encoder_padding_mask": None}
+        
+        bsz = src_tokens.size(0)
+        new_order = torch.arange(bsz).view(-1, 1).repeat(1, args.beam).view(-1).long()
+        encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
+        incre_states = {}
+        
+        model = model.decoder
+        print(f"| Decoder Arch: {model} \n")
+        inputs = (prev_output_tokens, encoder_out_test_with_beam, incre_states)
+        input_names = ["prev_output_tokens", "encoder_out", "incre_states"]
+        output_names = ["decoder_output"]
+
+    else:
+        inputs = (src_tokens, src_lengths, prev_output_tokens)
+        input_names = ["src_tokens", "src_lengths", "prev_output_tokens"]
+        output_names = ["model_output"]
+
+    model = wrapper_model_onnx.WrapperModelONNX(model)
+    model.prepare_for_onnx_export()
+
     torch.onnx.export(
-        wrapper_model,
-        (src_tokens, src_lengths, prev_output_tokens), 
+        model,
+        inputs,
         onnx_file_path,
         opset_version=14,
         export_params=True,
         training=torch.onnx.TrainingMode.EVAL,
-        do_constant_folding=True,
-        input_names=["src_tokens", "src_lengths", "prev_output_tokens"],
-        output_names=["output"],
+        do_constant_folding=False,
+        input_names=input_names,
+        output_names=output_names,
+        dynamic_axes=None
     )
-    print(f"| Saved \n| ONNX model path: {onnx_file_path}")
+
+    print(f"| Successfully saved ONNX model at: {onnx_file_path}")
+
+    simplify_onnx(onnx_file_path)
 
 
 def main():
@@ -63,12 +114,18 @@ def main():
         model.set_sample_config(config_sam)
     model.eval()
 
+
     if args.train_subtransformer:
-        print(" \n\n| Exporting SubTransformer model to ONNX...\n\n")
+        print(" \n\n| Exporting SubTransformer model to ONNX...\n")
         print(f"| SubTransformer Arch: {utils.get_subtransformer_config(args)} \n")
     else:
-        print(" \n\n| Exporting SuperTransformer model to ONNX...\n\n")
+        print(" \n\n| Exporting SuperTransformer model to ONNX...\n")
         print(f"| SuperTransformer Arch: {model} \n")
+    if args.enc:
+        print(" | Encoder only\n")
+    if args.dec:
+        print(" | Decoder only\n")
+
     export_to_onnx(model, args)
     
     print("| All set!")

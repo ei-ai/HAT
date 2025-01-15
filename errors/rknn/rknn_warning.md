@@ -4,6 +4,13 @@
 * [wmt19_en_de](#wmt19_en_de)
 * [iwslt14_de_en](#iwslt14_de_en)
 
+W load_onnx: The config.mean_values is None, zeros will be set for input 1!
+W load_onnx: The config.std_values is None, ones will be set for input 1!
+W load_onnx: The config.mean_values is None, zeros will be set for input 2!
+W load_onnx: The config.std_values is None, ones will be set for input 2!
+W load_onnx: The config.mean_values is None, zeros will be set for input 3!
+W load_onnx: The config.std_values is None, ones will be set for input 3!
+
 # wmt16_en_de
 `python convert_rknn.py --dataset-name=wmt14_en_de`
 `python convert_rknn.py --dataset-name=wmt14_en_de > ./errors/rknn/convert_rknn_wmt14.en-de.txt 2>&1`  
