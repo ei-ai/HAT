@@ -13,7 +13,7 @@ import pdb
 
 import numpy as np
 
-from fairseq import checkpoint_utils, distributed_utils, npu_utils, options, tasks, utils # npu_utils 뺄까
+from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
 from wrapper_models import wrapper_model_rknn
 from tqdm import tqdm
 
@@ -36,8 +36,9 @@ def main(args):
 
     # Build model
     model = task.build_model(args)
-    if args.latnpu:
+    if args.latnpu: #모델 로드
         model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('/data/binary/'))
+        model2 = task.build_model(args)
     print(model)
 
     # specify the length of the dummy input for profile
@@ -72,7 +73,8 @@ def main(args):
             start = torch.cuda.Event(enable_timing=True)
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
-            model.npu() # 모델 초기화화
+            model.npu()  # 모델 초기화
+            model2.cpu()
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -86,10 +88,13 @@ def main(args):
             features = utils.get_config_features(config_sam)
             fid.write(','.join(map(str, features)) + ',')
 
-            model.set_sample_config(config_sam)
+            if args.latnpu:
+                model2.set_sample_config(config_sam)
+            elif args.latcpu or args.latgpu :
+                model.set_sample_config(config_sam)
 
             # dry runs
-            for _ in range(5):
+            for _ in range(5): 
                 encoder_out_test = model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
 
             encoder_latencies = []
@@ -97,7 +102,7 @@ def main(args):
             for _ in tqdm(range(args.latiter)):
                 if args.latgpu:
                     start.record()
-                elif args.latcpu:
+                elif args.latcpu or args.latnpu:
                     start = time.time()
 
                 model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
@@ -109,11 +114,11 @@ def main(args):
                     if not args.latsilent:
                         print('Encoder one run on GPU (for dataset generation): ', start.elapsed_time(end))
 
-                elif args.latcpu:
+                elif args.latcpu or args.latnpu:
                     end = time.time()
                     encoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
-                        print('Encoder one run on CPU (for dataset generation): ', (end - start) * 1000)
+                        print('Encoder one run on CPU or NPU (for dataset generation): ', (end - start) * 1000)
 
             # only use the 10% to 90% latencies to avoid outliers
             encoder_latencies.sort()
@@ -125,12 +130,17 @@ def main(args):
             if args.latgpu:
                 new_order = new_order.cuda()
 
-            encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
-
+            if args.latnpu:
+                encoder_out_test = model2.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+                encoder_out_test_with_beam = model2.encoder.reorder_encoder_out(encoder_out_test, new_order)
+            elif args.latcpu or args.latgpu :
+                encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
+                
             # dry runs
             for _ in range(5):
                 model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
                                    encoder_out=encoder_out_test_with_beam)
+            # 디코더 인퍼런스
 
             # decoder is more complicated because we need to deal with incremental states and auto regressive things
             decoder_iterations_dict = {'iwslt': 23, 'wmt': 30}
@@ -144,12 +154,13 @@ def main(args):
             for _ in tqdm(range(args.latiter)):
                 if args.latgpu:
                     start.record()
-                elif args.latcpu:
+                elif args.latcpu or args.latnpu:
                     start = time.time()
                 incre_states = {}
-                for k_regressive in range(decoder_iterations):
+                for k_regressive in range(decoder_iterations): # 디코더 인퍼런스
                     model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam, incremental_state=incre_states)
+                
                 if args.latgpu:
                     end.record()
                     torch.cuda.synchronize()
@@ -157,7 +168,7 @@ def main(args):
                     if not args.latsilent:
                         print('Decoder one run on GPU (for dataset generation): ', start.elapsed_time(end))
 
-                elif args.latcpu:
+                elif args.latcpu or args.latnpu:
                     end = time.time()
                     decoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
@@ -175,7 +186,7 @@ def main(args):
 
 def cli_main():
     parser = options.get_training_parser()
-
+    # 여기 주소명 받는거 수정!!
     parser.add_argument('--latnpu', action='store_true', help='measure SubTransformer latency on NPU')
     parser.add_argument('--latgpu', action='store_true', help='measure SubTransformer latency on GPU')
     parser.add_argument('--latcpu', action='store_true', help='measure SubTransformer latency on CPU')
@@ -184,19 +195,10 @@ def cli_main():
 
     parser.add_argument('--lat-dataset-path', type=str, default='./latency_dataset/lat.tmp', help='the path to write latency dataset')
     parser.add_argument('--lat-dataset-size', type=int, default=200, help='number of data points for the dataset')
-
-    parser.add_argument('--lat-model-path', type=str, help='the path to get rknn model path')
-    parser.add_argument('--lat-modelEnc-path', type=str, help='the path to get rknn model path')
-    parser.add_argument('--lat-modelDec-path', type=str, help='the path to get rknn model path')
     
     options.add_generation_args(parser)
 
     args = options.parse_args_and_arch(parser)
-
-    # npu를 사용할 시, super를 rknn으로 변환한 모델 위치, 인코더 위치, 디코더 위치치를 입력 받도록 함
-    if args.latnpu and (not args.lat_model_path or not args.lat_modelEnc_path or not args.lat_modelDec_path):
-        print("Error: --latnpu requires --lat-model-path, --lat-modelEnc-path, and --lat-modelDec-path to be specified.")
-
     
     if args.latcpu:
         args.cpu = True
