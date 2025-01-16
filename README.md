@@ -213,6 +213,12 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```sh
     python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
     ```
+    ```sh
+    python latency_dataset.py --latnpu --configs=configs/iwslt14.de-en/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
+    ```
 2. Train a latency predictor
     ```sh
     python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
