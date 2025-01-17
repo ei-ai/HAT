@@ -1,5 +1,6 @@
 *.so
 .eggs/
+.vscode/
 build/
 checkpoints/
 process.sh
@@ -14,12 +15,11 @@ errors/rknn/convert_rknn/
 fairseq_original/
 fairseq_to_trace/
 fairseq.egg-info/
+fairseq/data/data_utils_fast.cpp
+fairseq/data/token_block_utils_fast.c
 !latency_dataset/
 latency_dataset/
-!configs/iwslt14.de-en/latency_dataset/
-!configs/wmt14.en-de/latency_dataset/
-!configs/wmt14.en-fr/latency_dataset/
-!configs/wmt19.en-de/latency_dataset/
+!errors/latency_dataset
 onnx_models/
 rknn_models/
 __pycache__/
