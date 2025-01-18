@@ -51,233 +51,39 @@ E Traceback (most recent call last):
   File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
 Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
 
-E RKNN: [12:10:04.480] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
 
-E RKNN: [12:10:04.481] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.481] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.482] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
 
 Measuring encoder for dataset generation...
   0%|                                                                                                                                                                 | 0/20 [00:00<?, ?it/s]E RKNN: [12:10:04.490] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.491] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.491] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.492] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.492] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.492] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.493] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.493] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.493] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.494] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.494] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.494] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.495] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.495] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.495] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.496] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.496] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.496] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.497] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
-
-E RKNN: [12:10:04.497] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
-E Catch exception when setting inputs.
-E Traceback (most recent call last):
-  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
-    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
-  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
-  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
-Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
 
 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 2788.86it/s]
 Encoder latency for dataset generation: Mean: 0.33473968505859375 ms;    Std: 0.013021671108647704 ms
+
+E RKNN: [12:54:14.481] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(1) >= input_num(1)!
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
+Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
+
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 2810.35it/s]
+Encoder latency for dataset generation: Mean: 0.32913684844970703 ms;    Std: 0.013868554832530371 ms
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1082, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+Exception: The input[0] need 2dims input, but 3dims input buffer feed.
+
+Measuring decoder for dataset generation...
+  0%|                                                                                                                                                                                                                | 0/20 [00:00<?, ?it/s]
 Traceback (most recent call last):
   File "/home/radxa/git/HAT/latency_dataset.py", line 213, in <module>
     cli_main()
   File "/home/radxa/git/HAT/latency_dataset.py", line 210, in cli_main
     main(args)
-  File "/home/radxa/git/HAT/latency_dataset.py", line 141, in main
-    model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
-  File "/home/radxa/git/HAT/wrapper_models/wrapper_model_rknn.py", line 89, in decoder
-    encoder_out = encoder_out.numpy()
-AttributeError: 'dict' object has no attribute 'numpy'
-```
+  File "/home/radxa/git/HAT/latency_dataset.py", line 161, in main
+    model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+TypeError: decoder() got an unexpected keyword argument 'incremental_state'
