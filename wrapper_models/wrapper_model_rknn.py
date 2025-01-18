@@ -1,5 +1,5 @@
 import torch
-from rknn.api import RKNNLite
+from rknnlite.api import RKNNLite
 
 # 인코더랑 디코더 인퍼런스 함수랑 시간 측정 함수만 만들면 끝난드아....
 
@@ -12,7 +12,7 @@ class RKNNEncoder:
             raise RuntimeError("Failed to load RKNN encoder model.")
 
     def init_runtime(self): # 모델 초기화
-        ret = self.rknn_lite.rknn.init_runtime(target='rk3588')
+        ret = self.encoder_rknn.rknn.init_runtime()
         if ret != 0:
             print('Init encoder runtime failed')
             exit(ret)
@@ -52,7 +52,7 @@ class RKNNDecoder:
             raise RuntimeError("Failed to load RKNN decoder model.")
 
     def init_runtime(self): # 모델 초기화
-        ret = self.rknn_lite.rknn.init_runtime(target='rk3588')
+        ret = self.decoder_rknn.rknn.init_runtime()
         if ret != 0:
             print('Init dncoder runtime failed')
             exit(ret)
@@ -97,7 +97,7 @@ class WrapperModelRKNN(torch.nn.Module):
         self.decoder = RKNNDecoder(self.decoder_rknn_path) # 디코더 로드
     
     def npu(self): # 모델 초기화
-        ret = self.rknn_lite.rknn.init_runtime(target='rk3588')
+        ret = self.rknn_lite.rknn.init_runtime()
         if ret != 0:
             print('Init runtime failed')
             exit(ret)
