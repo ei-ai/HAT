@@ -40,3 +40,47 @@ Traceback (most recent call last):
     ret = self.rknn_lite.rknn.load_rknn(self.rknn_path) #모델 로드
 AttributeError: 'RKNNLite' object has no attribute 'rknn'
 ```
+
+3. inputerror
+```sh
+I RKNN: [10:23:26.831] RKNN Runtime Information, librknnrt version: 2.0.0b0 (35a6907d79@2024-03-24T10:31:14)
+I RKNN: [10:23:26.833] RKNN Driver Information, version: 0.9.6
+I RKNN: [10:23:26.839] RKNN Model Information, version: 6, toolkit version: 2.3.0(compiler version: 2.3.0 (@2024-11-07T08:11:34)), target: RKNPU v2, target platform: rk3588, framework name: ONNX, framework layout: NCHW, model inference type: static_shape
+W RKNN: [10:23:26.841] RKNN Model version: 2.3.0 not match with rknn runtime version: 2.0.0
+E RKNN: [10:23:26.965] Unsupport CPU op: CumSum in this librknnrt.so, please try to register custom op by callingrknn_register_custom_ops or please try updating to the latest version of the toolkit2 and runtime from: https://console.zbox.filez.com/l/I00fc3 (PWD: rknn)
+E RKNN: [10:23:26.965] Unsupport CPU op: CumSum in this librknnrt.so, please try to register custom op by callingrknn_register_custom_ops or please try updating to the latest version of the toolkit2 and runtime from: https://console.zbox.filez.com/l/I00fc3 (PWD: rknn)
+W RKNN: [10:23:26.965] query RKNN_QUERY_INPUT_DYNAMIC_RANGE error, rknn model is static shape type, please export rknn with dynamic_shapes
+W Query dynamic range failed. Ret code: RKNN_ERR_MODEL_INVALID. (If it is a static shape RKNN model, please ignore the above warning message.)
+I RKNN: [10:23:27.017] RKNN Runtime Information, librknnrt version: 2.0.0b0 (35a6907d79@2024-03-24T10:31:14)
+I RKNN: [10:23:27.017] RKNN Driver Information, version: 0.9.6
+I RKNN: [10:23:27.017] RKNN Model Information, version: 6, toolkit version: 2.3.0(compiler version: 2.3.0 (@2024-11-07T08:11:34)), target: RKNPU v2, target platform: rk3588, framework name: ONNX, framework layout: NCHW, model inference type: static_shape
+W RKNN: [10:23:27.017] RKNN Model version: 2.3.0 not match with rknn runtime version: 2.0.0
+E RKNN: [10:23:27.084] Unsupport CPU op: CumSum in this librknnrt.so, please try to register custom op by callingrknn_register_custom_ops or please try updating to the latest version of the toolkit2 and runtime from: https://console.zbox.filez.com/l/I00fc3 (PWD: rknn)
+W RKNN: [10:23:27.084] query RKNN_QUERY_INPUT_DYNAMIC_RANGE error, rknn model is static shape type, please export rknn with dynamic_shapes
+W Query dynamic range failed. Ret code: RKNN_ERR_MODEL_INVALID. (If it is a static shape RKNN model, please ignore the above warning message.)
+I RKNN: [10:23:27.143] RKNN Runtime Information, librknnrt version: 2.0.0b0 (35a6907d79@2024-03-24T10:31:14)
+I RKNN: [10:23:27.143] RKNN Driver Information, version: 0.9.6
+I RKNN: [10:23:27.144] RKNN Model Information, version: 6, toolkit version: 2.3.0(compiler version: 2.3.0 (@2024-11-07T08:11:34)), target: RKNPU v2, target platform: rk3588, framework name: ONNX, framework layout: NCHW, model inference type: static_shape
+W RKNN: [10:23:27.144] RKNN Model version: 2.3.0 not match with rknn runtime version: 2.0.0
+E RKNN: [10:23:27.235] Unsupport CPU op: CumSum in this librknnrt.so, please try to register custom op by callingrknn_register_custom_ops or please try updating to the latest version of the toolkit2 and runtime from: https://console.zbox.filez.com/l/I00fc3 (PWD: rknn)
+W RKNN: [10:23:27.235] query RKNN_QUERY_INPUT_DYNAMIC_RANGE error, rknn model is static shape type, please export rknn with dynamic_shapes
+W Query dynamic range failed. Ret code: RKNN_ERR_MODEL_INVALID. (If it is a static shape RKNN model, please ignore the above warning message.)
+0
+Enc Input :  [array([[2, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+        7]]), array([23])]
+Enc Input shpe :  (1, 23)
+Enc Input dtype :  int64
+Traceback (most recent call last):
+  File "/home/radxa/git/HAT/latency_dataset.py", line 213, in <module>
+    cli_main()
+  File "/home/radxa/git/HAT/latency_dataset.py", line 210, in cli_main
+    main(args)
+  File "/home/radxa/git/HAT/latency_dataset.py", line 98, in main
+    encoder_out_test = model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+  File "/home/radxa/git/HAT/wrapper_models/wrapper_model_rknn.py", line 37, in __call__
+    return self.forward(src_tokens, src_lengths)
+  File "/home/radxa/git/HAT/wrapper_models/wrapper_model_rknn.py", line 26, in forward
+    inputs_info = self.encoder_rknn.inputs
+AttributeError: 'RKNNLite' object has no attribute 'inputs'
+```
+test
