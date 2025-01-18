@@ -12,7 +12,7 @@ class RKNNEncoder:
             raise RuntimeError("Failed to load RKNN encoder model.")
 
     def init_runtime(self): # 모델 초기화
-        ret = self.encoder_rknn.rknn.init_runtime()
+        ret = self.encoder_rknn.init_runtime()
         if ret != 0:
             print('Init encoder runtime failed')
             exit(ret)
@@ -52,7 +52,7 @@ class RKNNDecoder:
             raise RuntimeError("Failed to load RKNN decoder model.")
 
     def init_runtime(self): # 모델 초기화
-        ret = self.decoder_rknn.rknn.init_runtime()
+        ret = self.decoder_rknn.init_runtime()
         if ret != 0:
             print('Init dncoder runtime failed')
             exit(ret)
@@ -87,7 +87,7 @@ class WrapperModelRKNN(torch.nn.Module):
         self.encoder_rknn_path = f'rknn_models/{datset_name}/{datset_name}_enc.rknn'
         self.decoder_rknn_path = f'rknn_models/{datset_name}/{datset_name}_dec.rknn'
         
-        ret = self.rknn_lite.rknn.load_rknn(self.rknn_path) #모델 로드
+        ret = self.rknn_lite.load_rknn(self.rknn_path) #모델 로드
         if ret != 0:
             print('Load RKNN model failed')
             exit(ret)
@@ -97,7 +97,7 @@ class WrapperModelRKNN(torch.nn.Module):
         self.decoder = RKNNDecoder(self.decoder_rknn_path) # 디코더 로드
     
     def npu(self): # 모델 초기화
-        ret = self.rknn_lite.rknn.init_runtime()
+        ret = self.rknn_lite.init_runtime()
         if ret != 0:
             print('Init runtime failed')
             exit(ret)
