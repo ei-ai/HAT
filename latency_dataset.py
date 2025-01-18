@@ -37,7 +37,7 @@ def main(args):
     # Build model
     model = task.build_model(args)
     if args.latnpu: #모델 로드
-        model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('data/binary/'))
+        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'))
         model2 = task.build_model(args)
     print(model)
 
@@ -73,7 +73,7 @@ def main(args):
             start = torch.cuda.Event(enable_timing=True)
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
-            model.npu()  # 모델 초기화
+            model.init_runtime()  # 모델 초기화
             model2.cpu()
 
         feature_info = utils.get_feature_info()
