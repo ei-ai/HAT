@@ -37,7 +37,7 @@ def main(args):
     # Build model
     model = task.build_model(args)
     if args.latnpu: #모델 로드
-        model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('/data/binary/'))
+        model = wrapper_model_rknn.WrapperModelRKNN(model, args.data.removeprefix('data/binary/'))
         model2 = task.build_model(args)
     print(model)
 

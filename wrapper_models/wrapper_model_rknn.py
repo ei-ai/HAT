@@ -19,8 +19,22 @@ class RKNNEncoder:
 
     def forward(self, src_tokens, src_lengths):
         inputs = self._prepare_encoder_inputs(src_tokens, src_lengths)
+        print("Enc Input : ", inputs)
+        print("Enc Input shpe : ", inputs[0].shape)
+        print("Enc Input dtype : ", inputs[0].dtype)
+
+        inputs_info = self.encoder_rknn.inputs
+        for idx, input_info in enumerate(inputs_info):
+            print(f"Input {idx} Name: {input_info['name']}")
+            print(f"Input {idx} Shape: {input_info[size]}")
+            print(f"Input {idx} Data Type: {input_info[dtype]}")
+
         outputs = self.encoder_rknn.inference(inputs=inputs)
+        print("Enc Output : ", outputs)
         return torch.tensor(outputs[0])
+
+    def __call__(self, src_tokens, src_lengths):
+        return self.forward(src_tokens, src_lengths)
 
     def reorder_encoder_out(self, encoder_out, new_order): # fairseq/models/transformer_super.py에서 복붙
         # 뭐야 얘도 안쓰여(latency_dataset.py)
@@ -66,6 +80,9 @@ class RKNNDecoder:
         outputs = self.decoder_rknn.inference(inputs=inputs)
         return torch.tensor(outputs[0])
     
+    def __call__(self, prev_output_tokens, encoder_outputs, incremental_state=None):
+        return self.forward(prev_ouput_tokens, encoder_outputs, incremental_state)
+
     def _prepare_decoder_inputs_with_state(self, prev_output_tokens, encoder_outputs, incremental_state):
         prepared_inputs = [
             prev_output_tokens.numpy(),
