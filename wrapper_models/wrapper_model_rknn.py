@@ -81,6 +81,7 @@ class RKNNDecoder:
 class WrapperModelRKNN(torch.nn.Module):
     def __init__(self, model, datset_name):
         super(WrapperModelRKNN, self).__init__()
+        print(datset_name)
         self.model = model
         self.rknn_lite = RKNNLite()
         self.rknn_path = f'rknn_models/{datset_name}/{datset_name}.rknn'
