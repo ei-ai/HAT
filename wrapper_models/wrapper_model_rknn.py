@@ -77,17 +77,17 @@ class WrapperModelRKNN:
     
     def encoder(self, src_tokens, src_lengths):
         src_tokens = src_tokens.numpy()
-        src_lengths = src_lengths.numpy()
-        src_tokens = np.expand_dims(src_tokens, axis=0)  
+        src_tokens = np.expand_dims(src_tokens, axis=0)
+        src_lengths = src_lengths.numpy()  
         src_lengths = np.expand_dims(src_lengths, axis=0)
         inputs = [src_tokens, src_lengths]
         return self.Encoder.run(inputs)
 
         
-    def decoder(self, prev_output_tokens, encoder_out):
+    def decoder(self, prev_output_tokens, encoder_out, incremental_state):
         prev_output_tokens = prev_output_tokens.numpy()
-        encoder_out = encoder_out.numpy()
-        prev_output_tokens = np.expand_dims(prev_output_tokens, axis=0)  
+        prev_output_tokens = np.expand_dims(prev_output_tokens, axis=0)
+        encoder_out = encoder_out["encoder_out"]
         encoder_out = np.expand_dims(encoder_out, axis=0)
         inputs = [prev_output_tokens, encoder_out]
         return self.Decoder.run(inputs)
