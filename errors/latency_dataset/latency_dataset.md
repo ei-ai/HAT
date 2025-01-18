@@ -83,3 +83,4 @@ Traceback (most recent call last):
     inputs_info = self.encoder_rknn.inputs
 AttributeError: 'RKNNLite' object has no attribute 'inputs'
 ```
+test
