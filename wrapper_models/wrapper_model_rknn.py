@@ -2,49 +2,6 @@ import torch
 import numpy as np
 from rknnlite.api import RKNNLite
 
-# class RKNNEncoder:
-#     def __init__(self, encoder_rknn_path):
-#         self.encoder_rknn = RKNNLite()
-#         print('| --> Load RKNN Encoder model')
-#         ret = self.encoder_rknn.load_rknn(encoder_rknn_path)
-#         if ret != 0:
-#             raise RuntimeError("Failed to load RKNN encoder model.")
-#         print(f'| RKNN encoder model path: {encoder_rknn_path}')
-
-
-#     def init_runtime(self): 
-#         print('| --> Init encoder runtime environment')
-#         ret = self.encoder_rknn.init_runtime()
-#         if ret != 0:
-#             print('| Init encoder runtime environment failed')
-#             exit(ret)
-            
-    
-#     def run(self, inputs):
-#         return self.encoder_rknn.inference(inputs=inputs)
-
-
-# class RKNNDecoder:
-#     def __init__(self, decoder_rknn_path): 
-#         self.decoder_rknn = RKNNLite()
-#         print('--> Load RKNN Decoder model')
-#         ret = self.decoder_rknn.load_rknn(decoder_rknn_path)
-#         if ret != 0:
-#             raise RuntimeError("Failed to load RKNN decoder model.")
-#         print(f'| RKNN decoder model path: {decoder_rknn_path}')
-
-
-#     def init_runtime(self): 
-#         print('| Init decoder runtime environment')
-#         ret = self.decoder_rknn.init_runtime()
-#         if ret != 0:
-#             print('| Init decoder runtime environment failed')
-#             exit(ret)
-            
-    
-#     def run(self, inputs):
-#         return self.decoder_rknn.inference(inputs=inputs)
-
 
 class RKNNcoder:
     def __init__(self, rknn_path, encoder=True):
@@ -124,5 +81,6 @@ class WrapperModelRKNN:
         src_tokens = src_tokens.numpy()
         prev_output_tokens = prev_output_tokens.numpy()
         inputs = [src_tokens, prev_output_tokens]
-        outputs = self.rknn_lite.inference(inputs=inputs)
+        return self.rknn_lite.inference(inputs=inputs)
+        
         

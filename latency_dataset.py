@@ -186,7 +186,6 @@ def main(args):
 
 def cli_main():
     parser = options.get_training_parser()
-    # 여기 주소명 받는거 수정!!
     parser.add_argument('--latnpu', action='store_true', help='measure SubTransformer latency on NPU')
     parser.add_argument('--latgpu', action='store_true', help='measure SubTransformer latency on GPU')
     parser.add_argument('--latcpu', action='store_true', help='measure SubTransformer latency on CPU')
