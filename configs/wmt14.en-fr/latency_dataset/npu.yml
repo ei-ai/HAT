@@ -1,7 +1,6 @@
 lat-dataset-path: ./latency_dataset/wmt14enfr_npu.csv
 lat-dataset-size: 2000
-cpu: True
-latcpu: True
+latnpu: True
 latiter: 20
 latsilent: True
 
