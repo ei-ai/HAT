@@ -4,9 +4,6 @@
 # Paper: https://arxiv.org/abs/2005.14187
 # Project page: https://hanruiwang.me/project_pages/hat/
 
-# 생각해보니까 이거 npu에서 돌리려면 gpu, cpu 관련된건 다 날려야 하지 않나, torch는 변환 안돼잖아
-# npu 명령 부분만 알아들을 수 있는 라이브러리 쓰면 되나?
-
 import torch
 import time
 import pdb
@@ -36,8 +33,8 @@ def main(args):
 
     # Build model
     model = task.build_model(args)
-    if args.latnpu: #모델 로드
-        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'))
+    if args.latnpu: 
+        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
         model2 = task.build_model(args)
     print(model)
 
@@ -73,7 +70,7 @@ def main(args):
             start = torch.cuda.Event(enable_timing=True)
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
-            model.init_runtime()  # 모델 초기화
+            model.init_runtime(full=False)  # 모델 초기화
             model2.cpu()
 
         feature_info = utils.get_feature_info()
@@ -119,6 +116,8 @@ def main(args):
                     encoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
                         print('Encoder one run on CPU or NPU (for dataset generation): ', (end - start) * 1000)
+                    if args.latnpu:
+                        model.release(encoder=True)
 
             # only use the 10% to 90% latencies to avoid outliers
             encoder_latencies.sort()
@@ -173,6 +172,8 @@ def main(args):
                     decoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
                         print('Decoder one run on CPU (for dataset generation): ', (end - start) * 1000)
+                    if args.latnpu:
+                        model.release(decoder=True)
 
             # only use the 10% to 90% latencies to avoid outliers
             decoder_latencies.sort()
@@ -180,7 +181,6 @@ def main(args):
 
             print(decoder_latencies)
             print(f'Decoder latency for dataset generation: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms')
-
             lats = [np.mean(encoder_latencies), np.mean(decoder_latencies), np.std(encoder_latencies), np.std(decoder_latencies)]
             fid.write(','.join(map(str, lats)) + '\n')
 
