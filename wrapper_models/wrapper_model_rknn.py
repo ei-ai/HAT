@@ -95,8 +95,8 @@ class WrapperModelRKNN:
             print('| Init model runtime environment failed')
             exit(ret)
             
-        self.Encoder.init_runtime() 
-        self.Decoder.init_runtime() 
+        self.Encoder.init_runtime(encoder=True) 
+        self.Decoder.init_runtime(encoder=False) 
     
     
     def encoder(self, src_tokens, src_lengths):
