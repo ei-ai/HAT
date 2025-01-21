@@ -87,3 +87,16 @@ Traceback (most recent call last):
   File "/home/radxa/git/HAT/latency_dataset.py", line 161, in main
     model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
 TypeError: decoder() got an unexpected keyword argument 'incremental_state'
+
+```
+Traceback (most recent call last):
+  File "/home/radxa/git/HAT/latency_dataset.py", line 213, in <module>
+    cli_main()
+  File "/home/radxa/git/HAT/latency_dataset.py", line 210, in cli_main
+    main(args)
+  File "/home/radxa/git/HAT/latency_dataset.py", line 141, in main
+    model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+  File "/home/radxa/git/HAT/wrapper_models/wrapper_model_rknn.py", line 117, in decoder
+    inputs = [prev_output_tokens] + encoder_out
+TypeError: can only concatenate list (not "dict") to list
+```
