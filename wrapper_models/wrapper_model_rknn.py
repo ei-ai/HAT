@@ -12,6 +12,7 @@ class RKNNLiteRuntime:
             raise RuntimeError(f"Failed to load RKNN model.")
         print(f'| RKNN model path: {rknn_path}')
 
+
     def init_runtime(self): 
         print(f'| --> Init runtime environment')
         ret = self.rknn_lite.init_runtime()
@@ -23,6 +24,19 @@ class RKNNLiteRuntime:
     def run(self, inputs):
         return self.rknn_lite.inference(inputs=inputs)
     
+
+    def latency(self, full=False, encoder=False, decoder=False):
+        if full:
+            # 전체 latency 측정
+            return 
+        if encoder:
+            # encoder_ffn_embed_dim_avg,encoder_self_attention_heads_avg만 측정
+            return
+        if decoder:
+            # decoder_ffn_embed_dim_avg,decoder_self_attention_heads_avg,decoder_ende_attention_heads_avg,decoder_arbitrary_ende_attn_avg
+            return
+    
+
     def release(self):
         return self.rknn_lite.release()
     
@@ -76,6 +90,14 @@ class WrapperModelRKNN:
         prev_output_tokens = prev_output_tokens.numpy()
         inputs = [src_tokens, prev_output_tokens]
         return self.full.inference(inputs=inputs)
+    
+    def latency(self, full=False, encoder=False, decoder=False):
+        if full:
+            self.full.lat(full=True)
+        if encoder:
+            self.encoder.release(encoder=True)
+        if decoder:
+            self.decoder.release(decoder=True)
     
     
     def release(self, full=False, encoder=False, decoder=False):
