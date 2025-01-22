@@ -5,27 +5,27 @@
 * [iwslt14deen](#iwslt14deen)
 
 # wmt14ende
-`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml`
-`python convert_onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt14.en-de.txt 2>&1`
+`python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml`
+`python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt14.en-de.txt 2>&1`
     
 [맨위로](#contents)
     
 # wmt14enfr
-`python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml`
-`python convert_onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt14.en-fr.txt 2>&1`
+`python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml`
+`python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt14.en-fr.txt 2>&1`
 
 [맨위로](#contents)
     
 # wmt19ende
-`python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml`
-`python convert_onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt19.en-de.txt 2>&1`
+`python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml`
+`python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml > ./errors/onnx/convert_onnx_wmt19.en-de.txt 2>&1`
 
     
 [맨위로](#contents)
     
 # iwslt14deen
-`python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml`
-`python convert_onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml > ./errors/onnx/convert_onnx_iwslt14.de-en.txt 2>&1`
+`python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml`
+`python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml > ./errors/onnx/convert_onnx_iwslt14.de-en.txt 2>&1`
 
 1. fairseq/modules/sinusoidal_positional_embedding.py:60: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!  
   if self.weights is None or max_pos > self.weights.size(0):  

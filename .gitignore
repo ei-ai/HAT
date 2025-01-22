@@ -12,6 +12,7 @@ downloaded_models/
 errors/onnx/*.txt
 errors/rknn/*.txt
 errors/rknn/convert_rknn/
+errors/rknn/without_onnxsim/
 fairseq_original/
 fairseq_to_trace/
 fairseq.egg-info/
