@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from rknnlite.api import RKNNLite
-
+# lite 말고 rknn 쓰게 바꿔야 함 
 
 class RKNNLiteRuntime:
     def __init__(self, rknn_path):
@@ -25,15 +25,14 @@ class RKNNLiteRuntime:
         return self.rknn_lite.inference(inputs=inputs)
     
 
-    def latency(self, full=False, encoder=False, decoder=False):
-        if full:
-            # 전체 latency 측정
-            return 
+    def latency(self, encoder=False, decoder=False):
         if encoder:
             # encoder_ffn_embed_dim_avg,encoder_self_attention_heads_avg만 측정
+            # 리턴값: 초 단위, dtype: float
             return
         if decoder:
             # decoder_ffn_embed_dim_avg,decoder_self_attention_heads_avg,decoder_ende_attention_heads_avg,decoder_arbitrary_ende_attn_avg
+            # 리턴값: 초 단위, dtype: float
             return
     
 
@@ -84,12 +83,6 @@ class WrapperModelRKNN:
             print("Warning: incremental_state is not supported in this implementation.")    
         return self.Decoder.run(inputs)
     
-
-    def run(self, src_tokens, prev_output_tokens):
-        src_tokens = src_tokens.numpy()
-        prev_output_tokens = prev_output_tokens.numpy()
-        inputs = [src_tokens, prev_output_tokens]
-        return self.full.inference(inputs=inputs)
     
     def latency(self, full=False, encoder=False, decoder=False):
         if full:
@@ -99,7 +92,7 @@ class WrapperModelRKNN:
         if decoder:
             self.decoder.release(decoder=True)
     
-    
+
     def release(self, full=False, encoder=False, decoder=False):
         if full:
             self.full.release()

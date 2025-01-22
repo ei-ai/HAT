@@ -9,12 +9,17 @@ import math
 import random
 import torch
 import pdb
+import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, options, progress_bar, tasks, utils
 from fairseq.data import iterators
 from fairseq.trainer import Trainer
 from fairseq.meters import AverageMeter, StopwatchMeter
 from copy import deepcopy
+
+from wrapper_models import wrapper_model_rknn
+from tqdm import tqdm
+
 
 
 def main(args, init_distributed=False):
@@ -308,6 +313,87 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
     return valid_losses
 
 
+def latency_npu(args):
+    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
+    model.init_runtime(full=False)
+
+    dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
+    if 'iwslt' in args.arch:
+        dummy_sentence_length = dummy_sentence_length_dict['iwslt']
+    elif 'wmt' in args.arch:
+        dummy_sentence_length = dummy_sentence_length_dict['wmt']
+    else:
+        raise NotImplementedError
+    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
+    dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
+    src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
+    src_lengths_test = torch.tensor([30])
+    prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
+
+    print('| Measuring model latency on NPU...')
+
+    # dry runs
+    for _ in range(5):
+        encoder_out_test = model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+
+    encoder_latencies = []
+    print('| Measuring encoder...')
+    for _ in tqdm(range(args.latiter)):
+
+        latency = model.latency(encoder=True)
+        encoder_latencies.append(latency)
+        if not args.latsilent:
+            print('| Encoder one run on NPU: ', latency)
+    model.release(encoder=True)
+
+    # only use the 10% to 90% latencies to avoid outliers
+    print(f'| Encoder latencies: {encoder_latencies}')
+    encoder_latencies.sort()
+    encoder_latencies = encoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
+    print(f'| Encoder latency: Mean: {np.mean(encoder_latencies)} ms; \t Std: {np.std(encoder_latencies)} ms')
+
+    # beam to the batch dimension
+    # encoder_out_test_with_beam = encoder_out_test.repeat(1, args.beam)
+    bsz = 1
+    new_order = torch.arange(bsz).view(-1, 1).repeat(1, args.beam).view(-1).long()
+    if args.latgpu:
+        new_order = new_order.cuda()
+
+    # 이부분 어떻게 처리할 지 고민 필요 
+    encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
+
+    # dry runs
+    for _ in range(5):
+        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                           encoder_out=encoder_out_test_with_beam)
+
+    # decoder is more complicated because we need to deal with incremental states and auto regressive things
+    decoder_iterations_dict = {'iwslt': 23, 'wmt': 30}
+    if 'iwslt' in args.arch:
+        decoder_iterations = decoder_iterations_dict['iwslt']
+    elif 'wmt' in args.arch:
+        decoder_iterations = decoder_iterations_dict['wmt']
+
+    decoder_latencies = []
+    print('| Measuring decoder...')
+    for _ in tqdm(range(args.latiter)):
+        incre_states = {}
+        for k_regressive in range(decoder_iterations):
+            model.latency(decoder=True)
+            if not args.latsilent:
+                print('| Decoder one run on NPU: ', latency)
+        model.release(decoder=True)
+
+    # only use the 10% to 90% latencies to avoid outliers
+    decoder_latencies.sort()
+    decoder_latencies = decoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
+
+    print(f'| Decoder latencies: {decoder_latencies}')
+    print(f'| Decoder latency: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms\n')
+
+    print(f"| Overall Latency: {np.mean(encoder_latencies) + np.mean(decoder_latencies)}")
+
+
 def distributed_main(i, args, start_rank=0):
     args.device_id = i
     if args.distributed_rank is None:  # torch.multiprocessing.spawn
@@ -323,6 +409,7 @@ def cli_main():
     # for profiling
     parser.add_argument('--profile-flops', action='store_true', help='measure the FLOPs of a SubTransformer')
 
+    parser.add_argument('--latnpu', action='store_true', help='measure SubTransformer latency on NPU')
     parser.add_argument('--latgpu', action='store_true', help='measure SubTransformer latency on GPU')
     parser.add_argument('--latcpu', action='store_true', help='measure SubTransformer latency on CPU')
     parser.add_argument('--latiter', type=int, default=300, help='how many iterations to run when measure the latency')
@@ -333,6 +420,9 @@ def cli_main():
     options.add_generation_args(parser)
 
     args = options.parse_args_and_arch(parser)
+
+    if args.latnpu:
+        latency_npu(args)
 
     if args.latcpu:
         args.cpu = True
