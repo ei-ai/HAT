@@ -33,10 +33,10 @@ def export_to_rknn(onnx_model_path, rknn_model_path):
         print('| Export RKNN model failed!')
         exit(ret)
     print('| done')
-
-    print(f"| RKNN model has been successfully exported to {rknn_model_path}")
-
+    
     rknn.release()
+    print(f"| RKNN model has been successfully exported to {rknn_model_path}")
+    
 
 
 def main():
