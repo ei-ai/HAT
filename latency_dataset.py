@@ -35,7 +35,7 @@ def main(args):
     model = task.build_model(args)
     if args.latnpu: 
         model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
-        model2 = task.build_model(args)
+        # model2 = task.build_model(args)
     print(model)
 
     # specify the length of the dummy input for profile
@@ -70,8 +70,9 @@ def main(args):
             start = torch.cuda.Event(enable_timing=True)
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
-            model.init_runtime(full=False)  # 모델 초기화
-            model2.cpu()
+            print('Measuring model latency on NPU for dataset generation...')
+            model.init_runtime(full=False)
+            # model2.cpu()
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -85,9 +86,9 @@ def main(args):
             features = utils.get_config_features(config_sam)
             fid.write(','.join(map(str, features)) + ',')
 
-            if args.latnpu:
-                model2.set_sample_config(config_sam)
-            elif args.latcpu or args.latgpu :
+            # if args.latnpu:
+            #     model2.set_sample_config(config_sam)
+            if args.latcpu or args.latgpu :
                 model.set_sample_config(config_sam)
 
             # dry runs
@@ -130,11 +131,17 @@ def main(args):
                 new_order = new_order.cuda()
 
             if args.latnpu:
-                encoder_out_test = model2.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
-                encoder_out_test_with_beam = model2.encoder.reorder_encoder_out(encoder_out_test, new_order)
+                # encoder_out_test = model2.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+                # encoder_out_test_with_beam = model2.encoder.reorder_encoder_out(encoder_out_test, new_order)
+                dummy_encoder_out_length = 512
+                if dummy_sentence_length==23:
+                    dummy_sentence_length = 25
+                    dummy_encoder_out_length = 640
+                encoder_out_test_with_beam = [[[7] * dummy_encoder_out_length for _ in range(5)] for _ in range(dummy_sentence_length)]
+
             elif args.latcpu or args.latgpu :
                 encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
-                
+
             # dry runs
             for _ in range(5):
                 model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
