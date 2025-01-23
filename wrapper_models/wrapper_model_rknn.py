@@ -7,7 +7,7 @@ from rknn.api import RKNN
 class RKNNLiteRuntime:
     def __init__(self, rknn_path):
         #self.rknn_lite = RKNNLite()
-        self.rknn=RKNN(verbose=True, verbose_file='./mobilenet_build.log')
+        self.rknn=RKNN()
         print(f'| --> Load RKNN model')
         #ret = self.rknn_lite.load_rknn(rknn_path)
         ret = self.rknn.load_rknn(rknn_path)
@@ -75,13 +75,14 @@ class WrapperModelRKNN:
         src_tokens = np.expand_dims(src_tokens, axis=0)
         src_lengths = np.expand_dims(src_lengths, axis=0)
         inputs = [src_tokens, src_lengths]
+        inputs = np.array(inputs, int)
         return self.Encoder.run(inputs)
 
         
     def decoder(self, prev_output_tokens, encoder_out, incremental_state=None):
         prev_output_tokens = prev_output_tokens.numpy()
         prev_output_tokens = np.expand_dims(prev_output_tokens, axis=0)
-        encoder_out = encoder_out["encoder_out"].detach().numpy()
+        encoder_out = encoder_out.numpy()
         encoder_out = np.expand_dims(encoder_out, axis=0)
         inputs = [prev_output_tokens, encoder_out]
         # inputs = [prev_output_tokens] + encoder_out
