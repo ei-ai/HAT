@@ -334,13 +334,14 @@ def latency_npu(args):
     if dummy_sentence_length==23:
         dummy_sentence_length = 25
         dummy_encoder_out_length = 640
-    encoder_out_test_with_beam = [[[7] * dummy_encoder_out_length for _ in range(5)] for _ in range(dummy_sentence_length)]
+    encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
+    encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
 
     print('| Measuring model latency on NPU...')
 
     # dry runs
     for _ in range(5):
-        model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+        model.encoder(src_tokens=src_tokens_test)
 
     encoder_latencies = []
     print('| Measuring encoder...')
