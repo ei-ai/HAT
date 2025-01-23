@@ -25,7 +25,7 @@ class RKNNLiteRuntime:
        return self.rknn.inference(inputs=inputs)
     
 
-        def latency(self, loop_cnt=100, encoder=False, decoder=False):
+    def latency(self, loop_cnt=100, encoder=False, decoder=False):
         if encoder:
             # encoder_ffn_embed_dim_avg,encoder_self_attention_heads_avg만 측정
             # 리턴값: 초 단위, dtype: float
