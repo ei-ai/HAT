@@ -41,7 +41,7 @@ class RKNNLiteRuntime:
 
             # 레이어별 실행 시간
             layer_times = ret.get('layer_times', [])
-            avg_layer_times = [(lt / loop_cnt) / 1000.0 for lt in layer_times]
+            avg_layer_times = [(lt / loop_cnt) * 1000 for lt in layer_times]
             return avg_total_time, avg_layer_times
 
         if decoder:
@@ -54,7 +54,7 @@ class RKNNLiteRuntime:
 
             # 레이어별 실행 시간
             layer_times = ret.get('layer_times', [])
-            avg_layer_times = [(lt / loop_cnt) / 1000.0 for lt in layer_times]
+            avg_layer_times = [(lt / loop_cnt) * 1000 for lt in layer_times]
             return avg_total_time, avg_layer_times
     
 
