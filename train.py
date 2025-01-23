@@ -317,6 +317,7 @@ def latency_npu(args):
     model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
     model.init_runtime(full=False)
 
+    # set dummy data
     dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
     if 'iwslt' in args.arch:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
@@ -329,12 +330,17 @@ def latency_npu(args):
     src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
     src_lengths_test = torch.tensor([30])
     prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
+    dummy_encoder_out_length = 512
+    if dummy_sentence_length==23:
+        dummy_sentence_length = 25
+        dummy_encoder_out_length = 640
+    encoder_out_test_with_beam = [[[7] * dummy_encoder_out_length for _ in range(5)] for _ in range(dummy_sentence_length)]
 
     print('| Measuring model latency on NPU...')
 
     # dry runs
     for _ in range(5):
-        encoder_out_test = model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+        model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
 
     encoder_latencies = []
     print('| Measuring encoder...')
@@ -351,16 +357,6 @@ def latency_npu(args):
     encoder_latencies.sort()
     encoder_latencies = encoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
     print(f'| Encoder latency: Mean: {np.mean(encoder_latencies)} ms; \t Std: {np.std(encoder_latencies)} ms')
-
-    # beam to the batch dimension
-    # encoder_out_test_with_beam = encoder_out_test.repeat(1, args.beam)
-    bsz = 1
-    new_order = torch.arange(bsz).view(-1, 1).repeat(1, args.beam).view(-1).long()
-    if args.latgpu:
-        new_order = new_order.cuda()
-
-    # 이부분 어떻게 처리할 지 고민 필요 
-    encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
 
     # dry runs
     for _ in range(5):
