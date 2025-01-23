@@ -1,13 +1,16 @@
 import torch
 import numpy as np
-from rknnlite.api import RKNNLite
+from rknn.api import RKNN
+#from rknnlite.api import RKNNLite
 # lite 말고 rknn 쓰게 바꿔야 함 
 
 class RKNNLiteRuntime:
     def __init__(self, rknn_path):
-        self.rknn_lite = RKNNLite()
+        #self.rknn_lite = RKNNLite()
+        self.rknn=RKNN(verbose=True, verbose_file='./mobilenet_build.log')
         print(f'| --> Load RKNN model')
-        ret = self.rknn_lite.load_rknn(rknn_path)
+        #ret = self.rknn_lite.load_rknn(rknn_path)
+        ret = self.rknn.load_rknn(rknn_path)
         if ret != 0:
             raise RuntimeError(f"Failed to load RKNN model.")
         print(f'| RKNN model path: {rknn_path}')
@@ -15,14 +18,16 @@ class RKNNLiteRuntime:
 
     def init_runtime(self): 
         print(f'| --> Init runtime environment')
-        ret = self.rknn_lite.init_runtime()
+        #ret = self.rknn_lite.init_runtime()
+        ret = self.rknn.init_runtime(target='RK3588')
         if ret != 0:
             print(f'| Init runtime environment failed')
             exit(ret)
             
     
     def run(self, inputs):
-        return self.rknn_lite.inference(inputs=inputs)
+       # return self.rknn_lite.inference(inputs=inputs)
+       return self.rknn.inference(inputs=inputs)
     
 
     def latency(self, encoder=False, decoder=False):
@@ -37,7 +42,8 @@ class RKNNLiteRuntime:
     
 
     def release(self):
-        return self.rknn_lite.release()
+       # return self.rknn_lite.release()
+       return self.rknn.release()
     
     
 class WrapperModelRKNN:
