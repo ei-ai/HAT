@@ -1,0 +1,26 @@
+D Save log info to: ./mobilenet_build.log
+D Save log info to: ./mobilenet_build.log
+I rknn-toolkit2 version: 2.3.0
+I rknn-toolkit2 version: 2.3.0
+I target set by user is: RK3588
+I target set by user is: RK3588
+I target set by user is: RK3588
+I target set by user is: RK3588
+[1;33mW[0m [1;33minference: The 'data_format' is not set, and its default value is 'nhwc'![0m
+[1;33mW[0m [1;33minference: The 'data_format' is not set, and its default value is 'nhwc'![0m
+[1;31mE[0m [1;31minference: Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 2635, in rknn.api.rknn_base.RKNNBase.inference
+  File "rknn/api/rknn_runtime.py", line 510, in rknn.api.rknn_runtime.RKNNRuntime.get_tensor_attr
+Exception: Query run perf failed, error code: RKNN_ERR_PARAM_INVALID
+[0m
+[1;31mE[0m [1;31minference: Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 2635, in rknn.api.rknn_base.RKNNBase.inference
+  File "rknn/api/rknn_runtime.py", line 510, in rknn.api.rknn_runtime.RKNNRuntime.get_tensor_attr
+Exception: Query run perf failed, error code: RKNN_ERR_PARAM_INVALID
+[0m
+[1;33mW[0m [1;33minference: ===================== WARN(1) =====================[0m
+[1;33mW[0m [1;33minference: ===================== WARN(1) =====================[0m
+[1;31mE[0m [1;31mrknn-toolkit2 version: 2.3.0[0m
+[1;31mE[0m [1;31mrknn-toolkit2 version: 2.3.0[0m
