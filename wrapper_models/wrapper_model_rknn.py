@@ -64,7 +64,7 @@ class WrapperModelRKNN:
     
         if full:
             self.full_path = f'rknn_models/{dataset_name}/{dataset_name}.rknn'
-            self.full = RKNNLiteRuntime(self.full_path)
+            self.rknn = RKNNLiteRuntime(self.full_path)
         if coder:
             self.encoder_rknn_path = f'rknn_models/{dataset_name}/{dataset_name}_enc.rknn'
             self.decoder_rknn_path = f'rknn_models/{dataset_name}/{dataset_name}_dec.rknn'
@@ -74,7 +74,7 @@ class WrapperModelRKNN:
     
     def init_runtime(self, full=True, coder=True): # init rknn lite runtime
         if full:
-            self.full()
+            self.rknn.init_runtime()
         if coder:
             self.Encoder.init_runtime() 
             self.Decoder.init_runtime() 
@@ -97,16 +97,16 @@ class WrapperModelRKNN:
     
     def latency(self, full=False, encoder=False, decoder=False):
         if full:
-            self.full.lat(full=True)
+            self.rknn.latency(full=True)
         if encoder:
-            self.encoder.release(encoder=True)
+            self.encoder.latency(encoder=True)
         if decoder:
-            self.decoder.release(decoder=True)
+            self.decoder.latency(decoder=True)
     
 
     def release(self, full=False, encoder=False, decoder=False):
         if full:
-            self.full.release()
+            self.rknn.release()
         if encoder:
             self.encoder.release()
         if decoder:
