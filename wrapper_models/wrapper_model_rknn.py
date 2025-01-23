@@ -72,10 +72,19 @@ class WrapperModelRKNN:
     def encoder(self, src_tokens, src_lengths):
         src_tokens = src_tokens.numpy()
         src_lengths = src_lengths.numpy()  
+        print('src_tokens', src_tokens)
+        print('src_lengths', src_lengths)
+
         src_tokens = np.expand_dims(src_tokens, axis=0)
         src_lengths = np.expand_dims(src_lengths, axis=0)
+        print('src_tokens', src_tokens)
+        print('src_tokens', src_tokens)
+        
         inputs = [src_tokens, src_lengths]
+
+        print(inputs)
         inputs = np.array(inputs, int)
+        print(inputs)
         return self.Encoder.run(inputs)
 
         
