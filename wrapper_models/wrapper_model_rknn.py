@@ -19,7 +19,7 @@ class RKNNLiteRuntime:
     def init_runtime(self): 
         print(f'| --> Init runtime environment')
         #ret = self.rknn_lite.init_runtime()
-        ret = self.rknn.init_runtime(target='RK3588')
+        ret = self.rknn.init_runtime(target='RK3588', perf_debug=True)
         if ret != 0:
             print(f'| Init runtime environment failed')
             exit(ret)
@@ -30,15 +30,32 @@ class RKNNLiteRuntime:
        return self.rknn.inference(inputs=inputs)
     
 
-    def latency(self, encoder=False, decoder=False):
+    def latency(self, loop_cnt=100, encoder=False, decoder=False):
         if encoder:
             # encoder_ffn_embed_dim_avg,encoder_self_attention_heads_avg만 측정
             # 리턴값: 초 단위, dtype: float
-            return
+            ret = self.rknn.eval_perf(loop_cnt=loop_cnt)
+            if ret !=0:
+                raise RuntimeError(f"Latency evaluation failed")
+            avg_total_time= ret['total_time'] / loop_cnt * 1000
+
+            # 레이어별 실행 시간
+            layer_times = ret.get('layer_times', [])
+            avg_layer_times = [(lt / loop_cnt) / 1000.0 for lt in layer_times]
+            return avg_total_time, avg_layer_times
+
         if decoder:
             # decoder_ffn_embed_dim_avg,decoder_self_attention_heads_avg,decoder_ende_attention_heads_avg,decoder_arbitrary_ende_attn_avg
             # 리턴값: 초 단위, dtype: float
-            return
+            ret = self.rknn.eval_perf(loop_cnt=loop_cnt)
+            if ret !=0:
+                raise RuntimeError(f"Latency evaluation failed")
+            avg_total_time= ret['total_time'] / loop_cnt * 1000
+
+            # 레이어별 실행 시간
+            layer_times = ret.get('layer_times', [])
+            avg_layer_times = [(lt / loop_cnt) / 1000.0 for lt in layer_times]
+            return avg_total_time, avg_layer_times
     
 
     def release(self):
