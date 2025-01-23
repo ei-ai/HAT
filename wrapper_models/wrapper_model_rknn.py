@@ -7,7 +7,7 @@ from rknn.api import RKNN
 class RKNNLiteRuntime:
     def __init__(self, rknn_path):
         #self.rknn_lite = RKNNLite()
-        self.rknn=RKNN(verbose=True, verbose_file='./mobilenet_build.log')
+        self.rknn=RKNN()
         print(f'| --> Load RKNN model')
         #ret = self.rknn_lite.load_rknn(rknn_path)
         ret = self.rknn.load_rknn(rknn_path)
