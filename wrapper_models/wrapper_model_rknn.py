@@ -58,21 +58,21 @@ class RKNNLiteRuntime:
     
     
 class WrapperModelRKNN:
-    def __init__(self, dataset_name, full=True, coder=True):
+    def __init__(self, model_name, full=True, coder=True):
         self.full = full
         self.coder = coder
     
         if full:
-            self.full_path = f'rknn_models/{dataset_name}/{dataset_name}.rknn'
+            self.full_path = f'rknn_models/{model_name}/{model_name}.rknn'
             self.rknn = RKNNLiteRuntime(self.full_path)
         if coder:
-            self.encoder_rknn_path = f'rknn_models/{dataset_name}/{dataset_name}_enc.rknn'
-            self.decoder_rknn_path = f'rknn_models/{dataset_name}/{dataset_name}_dec.rknn'
+            self.encoder_rknn_path = f'rknn_models/{model_name}/{model_name}_enc.rknn'
+            self.decoder_rknn_path = f'rknn_models/{model_name}/{model_name}_dec.rknn'
             self.Encoder = RKNNLiteRuntime(self.encoder_rknn_path) 
             self.Decoder = RKNNLiteRuntime(self.decoder_rknn_path) 
     
     
-    def init_runtime(self, full=True, coder=True): # init rknn lite runtime
+    def init_runtime(self, full=False, coder=False): # init rknn lite runtime
         if full:
             self.rknn.init_runtime()
         if coder:
@@ -81,23 +81,24 @@ class WrapperModelRKNN:
     
     
     def encoder(self, src_tokens):
-        src_tokens = src_tokens.numpy() 
+        src_tokens = src_tokens.numpy()
+        src_tokens = src_tokens.reshape(1, 1, *src_tokens.shape) 
         inputs = [src_tokens]
         return self.Encoder.run(inputs)
         
+        
     def decoder(self, prev_output_tokens, encoder_out, incremental_state=None):
         prev_output_tokens = prev_output_tokens.numpy()
+        prev_output_tokens = prev_output_tokens.reshape(1, 1, *prev_output_tokens.shape)
         encoder_out = encoder_out.numpy()
+        encoder_out = encoder_out.reshape(1, *encoder_out.shape)
         inputs = [prev_output_tokens, encoder_out]
-        # inputs = [prev_output_tokens] + encoder_out
         if incremental_state is not None:
             print("Warning: incremental_state is not supported in this implementation.")    
         return self.Decoder.run(inputs)
     
     
-    def latency(self, full=False, encoder=False, decoder=False):
-        if full:
-            self.rknn.latency(full=True)
+    def latency(self, encoder=False, decoder=False):
         if encoder:
             self.encoder.latency(encoder=True)
         if decoder:
@@ -111,5 +112,3 @@ class WrapperModelRKNN:
             self.encoder.release()
         if decoder:
             self.decoder.release()
-            
-        

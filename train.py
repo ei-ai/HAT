@@ -314,14 +314,14 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
 
 
 def latency_npu(args):
-    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
+    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.rknn_model, full=False)
     model.init_runtime(full=False)
 
     # set dummy data
     dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
-    if 'iwslt' in args.arch:
+    if 'iwslt' in args.rknn_model:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
-    elif 'wmt' in args.arch:
+    elif 'wmt' in args.rknn_model:
         dummy_sentence_length = dummy_sentence_length_dict['wmt']
     else:
         raise NotImplementedError
@@ -405,6 +405,8 @@ def cli_main():
 
     # for profiling
     parser.add_argument('--profile-flops', action='store_true', help='measure the FLOPs of a SubTransformer')
+
+    parser.add_argument('--rknn-model', required=False, help='when measutring SubTransformer latency on NPU, use --rknn_model to specify model')
 
     parser.add_argument('--latnpu', action='store_true', help='measure SubTransformer latency on NPU')
     parser.add_argument('--latgpu', action='store_true', help='measure SubTransformer latency on GPU')
