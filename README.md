@@ -17,60 +17,6 @@
 
 ## Dependencies
 <details>
-<summary> MacOS </summary>
-<div markdown=1>
-
-* OS: Sonoma 14.1
-* GPU: 14개(Apple M3 Pro)
-* Python = 3.9.21
-* requirements.txt
-    ```sh
-    build==1.2.2.post1
-    cffi==1.17.1
-    click==8.1.8
-    colorama==0.4.6
-    coloredlogs==15.0.1
-    ConfigArgParse==1.7
-    Cython==3.0.11
-    -e git+https://github.com/mit-han-lab/hardware-aware-transformers.git@70e5a279d080670208249fdd98ed731fa9bcc466#egg=fairseq
-    fastBPE @ file:///Users/(생략)/hardware-aware-transformers/fastBPE
-    filelock==3.16.1
-    flatbuffers==24.12.23
-    fsspec==2024.12.0
-    humanfriendly==10.0
-    importlib_metadata==8.5.0
-    Jinja2==3.1.5
-    joblib==1.4.2
-    lxml==5.3.0
-    MarkupSafe==3.0.2
-    mpmath==1.3.0
-    networkx==3.2.1
-    numpy==2.0.2
-    onnx==1.17.0
-    onnxruntime==1.19.2
-    packaging==24.2
-    portalocker==3.0.0
-    protobuf==5.29.2
-    pycparser==2.22
-    pyproject_hooks==1.2.0
-    regex==2024.11.6
-    sacrebleu==2.4.3
-    sacremoses==0.1.1
-    sympy==1.13.1
-    tabulate==0.9.0
-    tensorboardX==2.6.2.2
-    tomli==2.2.1
-    torch==2.5.1
-    tqdm==4.67.1
-    typing_extensions==4.12.2
-    ujson==5.10.0
-    zipp==3.21.0
-    ```
-
-</div>
-</details>
-
-<details>
 <summary> Ububtu </summary>
 <div markdown=1>
 
@@ -175,16 +121,6 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
-    
-    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml --enc
-    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml --enc
-    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml --enc
-    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml --enc
-
-    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml --dec
-    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml --dec
-    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml --dec
-    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml --dec
     ```
     * `.onnx` to `.rknn`
     ```sh
@@ -195,16 +131,10 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python convert2rknn.py --onnx-name=wmt14_en_fr
     python convert2rknn.py --onnx-name=wmt19_en_de
     python convert2rknn.py --onnx-name=iwslt14_de_en
-
-    python convert2rknn.py --onnx-name=wmt14_en_de --enc
-    python convert2rknn.py --onnx-name=wmt14_en_fr --enc
-    python convert2rknn.py --onnx-name=wmt19_en_de --enc
-    python convert2rknn.py --onnx-name=iwslt14_de_en --enc
-
-    python convert2rknn.py --onnx-name=wmt14_en_de --dec
-    python convert2rknn.py --onnx-name=wmt14_en_fr --dec
-    python convert2rknn.py --onnx-name=wmt19_en_de --dec
-    python convert2rknn.py --onnx-name=iwslt14_de_en --dec
+    ```
+    * download
+    ```
+    gdown --folder https://drive.google.com/drive/folders/1dB2Wha-Sl2I_qBM_Ty01RXBfCRXOHt5L
     ```
 
 
@@ -265,4 +195,10 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 
 
 ### Testing
-
+* NPU latency
+    ```sh
+    python convert2rknn.py --rknn-name=[model_name] --latnpu
+    ```
+    ```sh
+    python convert2rknn.py --rknn-name=HAT_wmt14ende_xeon@204.2ms_bleu@27.6 --latnpu
+    ```

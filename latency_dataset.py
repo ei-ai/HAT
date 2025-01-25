@@ -32,10 +32,11 @@ def main(args):
     task = tasks.setup_task(args)
 
     # Build model
-    model = task.build_model(args)
     if args.latnpu: 
-        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
+        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), coder=True)
         # model2 = task.build_model(args)
+    elif args.latcpu or args.latgpu: 
+        model = task.build_model(args)
     print(model)
 
     # specify the length of the dummy input for profile
@@ -71,7 +72,7 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            model.init_runtime(full=False)
+            model.init_runtime(coder=True)
             # model2.cpu()
 
         feature_info = utils.get_feature_info()
