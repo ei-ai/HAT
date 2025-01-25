@@ -58,7 +58,7 @@ class RKNNLiteRuntime:
     
     
 class WrapperModelRKNN:
-    def __init__(self, model_name, full=True, coder=True):
+    def __init__(self, model_name, full=False, coder=False):
         self.full = full
         self.coder = coder
     

@@ -314,8 +314,8 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
 
 
 def latency_npu(args):
-    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.rknn_model, full=False)
-    model.init_runtime(full=False)
+    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.rknn_model, coder=True)
+    model.init_runtime(coder=True)
 
     # set dummy data
     dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
