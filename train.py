@@ -314,7 +314,7 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
 
 
 def latency_npu(args):
-    model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
+    model = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, full=False)
     model.init_runtime(full=False)
 
     # set dummy data
