@@ -32,10 +32,11 @@ def main(args):
     task = tasks.setup_task(args)
 
     # Build model
-    model = task.build_model(args)
     if args.latnpu: 
-        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), full=False)
+        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), coder=True)
         # model2 = task.build_model(args)
+    elif args.latcpu or args.latgpu: 
+        model = task.build_model(args)
     print(model)
 
     # specify the length of the dummy input for profile
@@ -71,7 +72,7 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            model.init_runtime(full=False)
+            model.init_runtime(coder=True)
             # model2.cpu()
 
         feature_info = utils.get_feature_info()
@@ -93,7 +94,7 @@ def main(args):
 
             # dry runs
             for _ in range(5): 
-                encoder_out_test = model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+                encoder_out_test = model.encoder(src_tokens=src_tokens_test)
 
             encoder_latencies = []
             print('Measuring encoder for dataset generation...')
@@ -137,7 +138,8 @@ def main(args):
                 if dummy_sentence_length==23:
                     dummy_sentence_length = 25
                     dummy_encoder_out_length = 640
-                encoder_out_test_with_beam = [[[7] * dummy_encoder_out_length for _ in range(5)] for _ in range(dummy_sentence_length)]
+                encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
+                encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
 
             elif args.latcpu or args.latgpu :
                 encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
