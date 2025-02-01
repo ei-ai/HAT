@@ -197,8 +197,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 ### Testing
 * NPU latency
     ```sh
-    python convert2rknn.py --rknn-name=[model_name] --latnpu
+    python train.py --rknn-name=[model_name] --latnpu -a=[arch]
     ```
     ```sh
-    python convert2rknn.py --rknn-name=HAT_wmt14ende_xeon@204.2ms_bleu@27.6 --latnpu
+    python train.py --rknn-model=iwslt14_de_en --latnpu -a=transformersuper_iwslt_de_en
     ```

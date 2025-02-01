@@ -33,7 +33,7 @@ def main(args):
 
     # Build model
     if args.latnpu: 
-        model = wrapper_model_rknn.WrapperModelRKNN(dataset_name=args.data.removeprefix('data/binary/'), coder=True)
+        model = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), coder=True)
         # model2 = task.build_model(args)
     elif args.latcpu or args.latgpu: 
         model = task.build_model(args)
