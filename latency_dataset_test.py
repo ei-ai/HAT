@@ -173,7 +173,7 @@ def main(args):
                 incre_states = {}
                 if args.latnpu:
                     for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
