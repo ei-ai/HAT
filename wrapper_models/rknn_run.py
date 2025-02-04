@@ -30,7 +30,7 @@ class RKNNLite:
     
     def encoder(self, src_tokens):
         src_tokens = src_tokens.numpy()
-        src_tokens = src_tokens.reshape(1, 1, *src_tokens.shape) 
+        # src_tokens = src_tokens.reshape(1, 1, *src_tokens.shape) 
         inputs = [src_tokens]
         return self.rknn_lite.inference(inputs=inputs)
         
