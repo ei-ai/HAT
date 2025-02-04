@@ -27,3 +27,4 @@ print('/n/n| Encoder one run on NPU: /n')
 print(latency)
 
 enc.release()
+
