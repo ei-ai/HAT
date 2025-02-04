@@ -354,7 +354,7 @@ def latency_npu(args):
     # encoder_latencies.sort()
     # encoder_latencies = encoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
     # print(f'| Encoder latency: Mean: {np.mean(encoder_latencies)} ms; \t Std: {np.std(encoder_latencies)} ms')
-    enc.release()
+    # enc.release()
 
     dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='dec')
     dec.init_runtime(target)
@@ -374,7 +374,7 @@ def latency_npu(args):
     latency = dec.latency()
     print('/n/n| Decoder one run on NPU: /n', latency)
     
-    dec.release(decoder=True)
+    # dec.release(decoder=True)
 
     # only use the 10% to 90% latencies to avoid outliers
     # decoder_latencies.sort()

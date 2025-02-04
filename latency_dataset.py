@@ -69,8 +69,11 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='enc')
-            dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='dec')
+            target = 'RK3588'
+            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='enc')
+            enc.init_runtime(target)
+            dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='dec')
+            dec.init_runtime(target)
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -173,7 +176,7 @@ def main(args):
                 incre_states = {}
                 if args.latnpu:
                     for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
@@ -201,9 +204,7 @@ def main(args):
             print(f'Decoder latency for dataset generation: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms')
             lats = [np.mean(encoder_latencies), np.mean(decoder_latencies), np.std(encoder_latencies), np.std(decoder_latencies)]
             fid.write(','.join(map(str, lats)) + '\n')
-        if args.latnpu:
-            enc.release()
-            dec.release()
+            
 
 def cli_main():
     parser = options.get_training_parser()

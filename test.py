@@ -20,17 +20,11 @@ if ret != 0:
     exit(ret)
 print(f'| Init done')
 
-
-# dry runs
-for _ in range(5):
-    perf_datail = enc.eval_perf()
-
-
 # encoder_latencies = []
 print('| Measuring encoder...')
-latency = enc.eval_perf()
-print('/n/n| Encoder one run on NPU: /n', latency)
+latency = enc.eval_perf(is_print=True)
+print('/n/n| Encoder one run on NPU: /n')
+print(latency)
 
 enc.release()
-
 
