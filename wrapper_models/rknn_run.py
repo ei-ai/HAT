@@ -2,9 +2,11 @@ import torch
 import numpy as np
 from rknnlite.api import RKNNLite
 
-class RKNNLite:
+class WrapperModelRKNNLite:
     def __init__(self, model_name, type):
         self.type = type
+        if model_name=='wmt16_en_de':
+            model_name = 'wmt14_en_de'
         self.rknn_path = f'rknn_models/{model_name}/{model_name}_{self.type}.rknn'
         self.rknn_lite = RKNNLite()
         print(f'| --> Load RKNN model')
@@ -37,9 +39,9 @@ class RKNNLite:
         
     def decoder(self, prev_output_tokens, encoder_out):
         prev_output_tokens = prev_output_tokens.numpy()
-        prev_output_tokens = prev_output_tokens.reshape(1, 1, *prev_output_tokens.shape)
+        # prev_output_tokens = prev_output_tokens.reshape(1, 1, *prev_output_tokens.shape)
         encoder_out = encoder_out.numpy()
-        encoder_out = encoder_out.reshape(1, *encoder_out.shape)
+        # encoder_out = encoder_out.reshape(1, *encoder_out.shape)
         inputs = [prev_output_tokens, encoder_out] 
         return self.rknn_lite.inference(inputs=inputs)
 

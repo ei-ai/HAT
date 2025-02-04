@@ -69,8 +69,8 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            enc = rknn_run.RKNNLite(model_name=args.rknn_model, type='enc')
-            dec = rknn_run.RKNNLite(model_name=args.rknn_model, type='dec')
+            enc = rknn_run.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='enc')
+            dec = rknn_run.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='dec')
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -173,7 +173,7 @@ def main(args):
                 incre_states = {}
                 if args.latnpu:
                     for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):

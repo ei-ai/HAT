@@ -103,3 +103,27 @@ ValueError: Traceback (most recent call last):
   File "rknn/api/rknn_runtime.py", line 582, in rknn.api.rknn_runtime.RKNNRuntime.set_inputs
 Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
 ```
+
+---
+## RKNN Lite
+1. iwslt
+    encoder
+    ```
+    E RKNN: [12:47:51.573] rknn_inputs_set, param input size(184) < model input size(200)
+    E Catch exception when setting inputs.
+    E Traceback (most recent call last):
+        File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+        self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+        File "rknnlite/api/rknn_runtime.py", line 1164, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+    Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
+    ```
+    decoder
+    ```
+    E Catch exception when setting inputs.
+    E Traceback (most recent call last):
+        File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+        self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+        File "rknnlite/api/rknn_runtime.py", line 1146, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+    IndexError: list index out of range
+
+    ```
