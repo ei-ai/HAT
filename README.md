@@ -140,6 +140,7 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
 
 ### Evolutionary Search  
 1.  Generate a latency dataset
+    * generate
     ```sh
     python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
     ```
@@ -148,6 +149,10 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python latency_dataset.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
+    ```
+    * download
+    ```sh
+    gdown --folder https://drive.google.com/drive/folders/1ejT4pdvw0VM6Y0XICrnQ-iWwYaOLjxRp
     ```
 2. Train a latency predictor
     ```sh
