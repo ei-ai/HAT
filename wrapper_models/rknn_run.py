@@ -37,9 +37,9 @@ class WrapperModelRKNNLite:
         
     def decoder(self, prev_output_tokens, encoder_out):
         prev_output_tokens = prev_output_tokens.numpy()
-        prev_output_tokens = prev_output_tokens.reshape(1, 1, *prev_output_tokens.shape)
+        # prev_output_tokens = prev_output_tokens.reshape(1, 1, *prev_output_tokens.shape)
         encoder_out = encoder_out.numpy()
-        encoder_out = encoder_out.reshape(1, *encoder_out.shape)
+        # encoder_out = encoder_out.reshape(1, *encoder_out.shape)
         inputs = [prev_output_tokens, encoder_out] 
         return self.rknn_lite.inference(inputs=inputs)
 
