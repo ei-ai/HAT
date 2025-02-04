@@ -204,9 +204,7 @@ def main(args):
             print(f'Decoder latency for dataset generation: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms')
             lats = [np.mean(encoder_latencies), np.mean(decoder_latencies), np.std(encoder_latencies), np.std(decoder_latencies)]
             fid.write(','.join(map(str, lats)) + '\n')
-        if args.latnpu:
-            enc.release()
-            dec.release()
+            
 
 def cli_main():
     parser = options.get_training_parser()
