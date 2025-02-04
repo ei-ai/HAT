@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from rknnlite.api import RKNNLite
 
-class RKNNLite:
+class WrapperModelRKNNLite:
     def __init__(self, model_name, type):
         self.type = type
         self.rknn_path = f'rknn_models/{model_name}/{model_name}_{self.type}.rknn'
