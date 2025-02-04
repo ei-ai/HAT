@@ -69,7 +69,7 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/')l, type='enc')
+            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='enc')
             dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='dec')
 
         feature_info = utils.get_feature_info()
