@@ -165,10 +165,16 @@ def main(args):
                 elif args.latcpu or args.latnpu:
                     start = time.time()
                 incre_states = {}
-                for k_regressive in range(decoder_iterations): # 디코더 인퍼런스
-                    model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                if args.latnpu:
+                    for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
+                        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                                       encoder_out=encoder_out_test_with_beam)
+                else :
+                    for k_regressive in range(decoder_iterations):
+                        model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam, incremental_state=incre_states)
                 
+              
                 if args.latgpu:
                     end.record()
                     torch.cuda.synchronize()

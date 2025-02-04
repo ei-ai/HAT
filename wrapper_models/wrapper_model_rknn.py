@@ -61,6 +61,9 @@ class WrapperModelRKNN:
     def __init__(self, model_name, full=False, coder=False):
         self.full = full
         self.coder = coder
+        
+        if model_name == 'wmt16_en_de':
+            model_name = 'wmt14_en_de'
     
         if full:
             self.full_path = f'rknn_models/{model_name}/{model_name}.rknn'
