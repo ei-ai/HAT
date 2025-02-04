@@ -44,7 +44,6 @@ class WrapperModelRKNN:
         if ret != 0:
             raise RuntimeError(f"Failed to load RKNN model.")
         print(f'| RKNN model path: {self.rknn_path}')
-
     
     def init_runtime(self, target=None):
         if target is None:
