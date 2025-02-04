@@ -32,12 +32,9 @@ def main(args):
     task = tasks.setup_task(args)
 
     # Build model
-    if args.latnpu: 
-        model = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), coder=True)
-        # model2 = task.build_model(args)
-    elif args.latcpu or args.latgpu: 
+    if args.latcpu or args.latgpu: 
         model = task.build_model(args)
-    print(model)
+        print(model)
 
     # specify the length of the dummy input for profile
     # for iwslt, the average length is 23, for wmt, that is 30
@@ -72,8 +69,8 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            model.init_runtime(coder=True)
-            # model2.cpu()
+            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='enc')
+            dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='dec')
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -92,9 +89,12 @@ def main(args):
             if args.latcpu or args.latgpu :
                 model.set_sample_config(config_sam)
 
-            # dry runs
-            for _ in range(5): 
-                encoder_out_test = model.encoder(src_tokens=src_tokens_test)
+                # dry runs
+                for _ in range(5): 
+                    encoder_out_test = model.encoder(src_tokens=src_tokens_test)
+            if args.latnpu:
+                for _ in range(5): 
+                    enc.encoder(src_tokens=src_tokens_test)
 
             encoder_latencies = []
             print('Measuring encoder for dataset generation...')
@@ -104,7 +104,10 @@ def main(args):
                 elif args.latcpu or args.latnpu:
                     start = time.time()
 
-                model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
+                if args.latnpu:
+                    enc.encoder(src_tokens=src_tokens_test)
+                elif args.latcpu or args.latgpu:
+                    model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
 
                 if args.latgpu:
                     end.record()
@@ -118,8 +121,7 @@ def main(args):
                     encoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
                         print('Encoder one run on CPU or NPU (for dataset generation): ', (end - start) * 1000)
-                    if args.latnpu:
-                        model.release(encoder=True)
+                    
 
             # only use the 10% to 90% latencies to avoid outliers
             encoder_latencies.sort()
@@ -132,26 +134,29 @@ def main(args):
                 new_order = new_order.cuda()
 
             if args.latnpu:
-                # encoder_out_test = model2.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
-                # encoder_out_test_with_beam = model2.encoder.reorder_encoder_out(encoder_out_test, new_order)
                 dummy_encoder_out_length = 512
                 if dummy_sentence_length==23:
                     dummy_sentence_length = 25
                     dummy_encoder_out_length = 640
                 encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
                 encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
+                
+                # dry runs
+                for _ in range(5):
+                    dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                                    encoder_out=encoder_out_test_with_beam)
 
             elif args.latcpu or args.latgpu :
                 encoder_out_test_with_beam = model.encoder.reorder_encoder_out(encoder_out_test, new_order)
 
-            # dry runs
-            for _ in range(5):
-                model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
-                                   encoder_out=encoder_out_test_with_beam)
-            # 디코더 인퍼런스
+                # dry runs
+                for _ in range(5):
+                    model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                                    encoder_out=encoder_out_test_with_beam)
+
 
             # decoder is more complicated because we need to deal with incremental states and auto regressive things
-            decoder_iterations_dict = {'iwslt': 23, 'wmt': 30}
+            decoder_iterations_dict = {'iwslt': 25, 'wmt': 30}
             if 'iwslt' in args.arch:
                 decoder_iterations = decoder_iterations_dict['iwslt']
             elif 'wmt' in args.arch:
@@ -164,17 +169,17 @@ def main(args):
                     start.record()
                 elif args.latcpu or args.latnpu:
                     start = time.time()
+
                 incre_states = {}
                 if args.latnpu:
                     for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
                         model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam)
-                else :
+                elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
                         model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
-                                       encoder_out=encoder_out_test_with_beam, incremental_state=incre_states)
-                
-              
+                                       encoder_out=encoder_out_test_with_beam, incremental_state=incre_states)     
+
                 if args.latgpu:
                     end.record()
                     torch.cuda.synchronize()
@@ -187,8 +192,6 @@ def main(args):
                     decoder_latencies.append((end - start) * 1000)
                     if not args.latsilent:
                         print('Decoder one run on CPU (for dataset generation): ', (end - start) * 1000)
-                    if args.latnpu:
-                        model.release(decoder=True)
 
             # only use the 10% to 90% latencies to avoid outliers
             decoder_latencies.sort()
@@ -198,6 +201,9 @@ def main(args):
             print(f'Decoder latency for dataset generation: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms')
             lats = [np.mean(encoder_latencies), np.mean(decoder_latencies), np.std(encoder_latencies), np.std(decoder_latencies)]
             fid.write(','.join(map(str, lats)) + '\n')
+        if args.latnpu:
+            enc.release()
+            dec.release()
 
 def cli_main():
     parser = options.get_training_parser()
