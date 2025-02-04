@@ -78,10 +78,7 @@ class WrapperModelRKNN:
             # encoder_ffn_embed_dim_avg,encoder_self_attention_heads_avg만 측정
             # 리턴값: 초 단위, dtype: float
             print('| Encoder')
-
             perf_datail = self.rknn.eval_perf()
-            if ret !=0:
-                raise RuntimeError(f"| Encoder latency evaluation failed")
 
             return perf_datail
 
@@ -89,10 +86,7 @@ class WrapperModelRKNN:
             # decoder_ffn_embed_dim_avg,decoder_self_attention_heads_avg,decoder_ende_attention_heads_avg,decoder_arbitrary_ende_attn_avg
             # 리턴값: 초 단위, dtype: float
             print('| Decoder')
-
-            ret = self.rknn.eval_perf()
-            if ret !=0:
-                raise RuntimeError(f"| Decoder latency evaluation failed")
+            perf_datail = self.rknn.eval_perf()
 
             return perf_datail
 
