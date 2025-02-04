@@ -35,6 +35,8 @@ class WrapperModelRKNN:
     def __init__(self, model_name, type=None):
         self.type = type
         self.rknn = RKNN()
+        if model_name == 'wmt16_en_de':
+            model_name = 'wmt14_en_de'
         self.rknn_path = f'rknn_models/{model_name}/{model_name}_{type}.rknn'
         
         print(f'| --> Load RKNN model')
