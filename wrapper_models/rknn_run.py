@@ -5,6 +5,8 @@ from rknnlite.api import RKNNLite
 class WrapperModelRKNNLite:
     def __init__(self, model_name, type):
         self.type = type
+        if model_name=='wmt16_en_de':
+            model_name = 'wmt14_en_de'
         self.rknn_path = f'rknn_models/{model_name}/{model_name}_{self.type}.rknn'
         self.rknn_lite = RKNNLite()
         print(f'| --> Load RKNN model')
