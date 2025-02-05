@@ -3,7 +3,7 @@ import torch
 import onnx
 from onnxsim import simplify
 from fairseq import tasks, options, utils
-from wrapper_models import wrapper_model_onnx
+from wrapper_models import wrapper_onnx
 
 def simplify_onnx(onnx_file_path):
     model = onnx.load(onnx_file_path)
@@ -80,7 +80,7 @@ def export_to_onnx(model, args):
         input_names = ["src_tokens", "src_lengths", "prev_output_tokens"]
         output_names = ["model_output"]
 
-    model = wrapper_model_onnx.WrapperModelONNX(model)
+    model = wrapper_onnx.WrapperModelONNX(model)
     model.prepare_for_onnx_export()
 
     torch.onnx.export(
