@@ -11,7 +11,7 @@ import pdb
 import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
-from wrapper_models import wrapper_model_rknn
+from wrapper_models import wrapper_rknn
 from tqdm import tqdm
 
 def main(args):
@@ -70,9 +70,9 @@ def main(args):
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
             target = 'RK3588'
-            enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='enc')
+            enc = wrapper_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='enc')
             enc.init_runtime(target)
-            dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='dec')
+            dec = wrapper_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='dec')
             dec.init_runtime(target)
 
         feature_info = utils.get_feature_info()

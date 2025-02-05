@@ -11,7 +11,7 @@ import pdb
 import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
-from wrapper_models import rknn_run
+from wrapper_models import wrapper_rknn_lite
 from tqdm import tqdm
 
 def main(args):
@@ -69,8 +69,8 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            enc = rknn_run.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='enc')
-            dec = rknn_run.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='dec')
+            enc = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='enc')
+            dec = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='dec')
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
