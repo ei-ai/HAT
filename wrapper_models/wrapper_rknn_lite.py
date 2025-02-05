@@ -29,7 +29,6 @@ class WrapperModelRKNNLite:
     
     def encoder(self, src_tokens):
         src_tokens = src_tokens.numpy()
-
         inputs = [src_tokens]
         return self.rknn_lite.inference(inputs=inputs)
         
