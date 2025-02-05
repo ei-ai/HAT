@@ -205,5 +205,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     python train.py --rknn-name=[model_name] --latnpu -a=[arch]
     ```
     ```sh
-    python train.py --rknn-model=iwslt14_de_en --latnpu -a=transformersuper_iwslt_de_en
+    python train.py \
+        --configs=configs/iwslt14.de-en/subtransformer/HAT_iwslt14deen_test.yml \
+        --sub-configs=configs/iwslt14.en-de/subtransformer/common.yml \
+        --rknn-model=iwslt14_de_en --latnpu 
     ```
