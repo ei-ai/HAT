@@ -1,4 +1,4 @@
-lat-dataset-path: ./latency_dataset/wmt14ende_npu_all.csv
+lat-dataset-path: ./latency_dataset/wmt14ende_npu.csv
 feature-norm: [640, 6, 2048, 6, 640, 6, 2048, 6, 6, 2]
 lat-norm: 5000
 feature-dim: 10
