@@ -433,6 +433,7 @@ def cli_main():
 
     if args.latnpu:
         latency_npu(args)
+        return
 
     if args.latcpu:
         args.cpu = True
