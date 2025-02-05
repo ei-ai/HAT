@@ -207,6 +207,6 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```sh
     python train.py \
         --configs=configs/iwslt14.de-en/subtransformer/HAT_iwslt14deen_test.yml \
-        --sub-configs=configs/iwslt14.en-de/subtransformer/common.yml \
+        --sub-configs=configs/iwslt14.de-en/subtransformer/common.yml \
         --rknn-model=iwslt14_de_en --latnpu 
     ```
