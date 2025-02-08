@@ -183,10 +183,20 @@ def make_positions(tensor, padding_idx, onnx_trace=False):
     # balanced to both work with ONNX export and XLA. In particular XLA
     # prefers ints, cumsum defaults to output longs, and ONNX doesn't know
     # how to handle the dtype kwarg in cumsum.
-    mask = tensor.ne(padding_idx).int()
+    #if onnx_trace:
+    mask = tensor.ne(padding_idx).int() 
+    cumsum_result = mask.clone()   
+    for i in range(1, mask.size(1)): 
+        cumsum_result[:, i] += cumsum_result[:, i - 1]  
+
     return (
-        torch.cumsum(mask, dim=1).type_as(mask) * mask
+        cumsum_result.type_as(mask) * mask
     ).long() + padding_idx
+        
+    # mask = tensor.ne(padding_idx).int()
+    # return (
+    #     torch.cumsum(mask, dim=1).type_as(mask) * mask
+    # ).long() + padding_idx
 
 
 def strip_pad(tensor, pad):
