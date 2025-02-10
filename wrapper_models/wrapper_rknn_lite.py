@@ -29,16 +29,13 @@ class WrapperModelRKNNLite:
         return self.rknn_lite.inference(inputs=inputs)
     
     def encoder(self, src_tokens):
-        print(2)
         src_tokens = src_tokens.numpy()
         inputs = [src_tokens]
-        print(3)
-        return self.rknn_lite.inference(inputs=inputs)
+        return self.rknn_lite.inference(inputs)
         
         
     def decoder(self, prev_output_tokens, encoder_out):
         prev_output_tokens = prev_output_tokens.numpy()
-        print(prev_output_tokens)
         encoder_out = encoder_out.numpy()
         if 'iwslt' in self.model_name:
             Concat_6=encoder_out.copy()
