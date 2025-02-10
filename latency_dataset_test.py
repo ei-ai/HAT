@@ -38,7 +38,7 @@ def main(args):
 
     # specify the length of the dummy input for profile
     # for iwslt, the average length is 23, for wmt, that is 30
-    dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
+    dummy_sentence_length_dict = {'iwslt': 25, 'wmt': 30}
     if 'iwslt' in args.arch:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
     elif 'wmt' in args.arch:
@@ -46,8 +46,8 @@ def main(args):
     else:
         raise NotImplementedError
 
-    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
-    dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
+    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 2)
+    dummy_prev = [7] * (dummy_sentence_length - 2) + [2]
     
     # for latency predictor: latency dataset generation
     with open(args.lat_dataset_path, 'w') as fid:
@@ -136,7 +136,7 @@ def main(args):
             if args.latnpu:
                 dummy_encoder_out_length = 512
                 if dummy_sentence_length==23:
-                    dummy_sentence_length = 25
+                    dummy_sentence_length = 24
                     dummy_encoder_out_length = 640
                 encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
                 encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
@@ -156,7 +156,7 @@ def main(args):
 
 
             # decoder is more complicated because we need to deal with incremental states and auto regressive things
-            decoder_iterations_dict = {'iwslt': 25, 'wmt': 30}
+            decoder_iterations_dict = {'iwslt': 24, 'wmt': 29}
             if 'iwslt' in args.arch:
                 decoder_iterations = decoder_iterations_dict['iwslt']
             elif 'wmt' in args.arch:
@@ -172,8 +172,8 @@ def main(args):
 
                 incre_states = {}
                 if args.latnpu:
-                    for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                    for _ in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
@@ -231,3 +231,4 @@ def cli_main():
 
 if __name__ == '__main__':
     cli_main()
+
