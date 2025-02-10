@@ -38,7 +38,7 @@ def main(args):
 
     # specify the length of the dummy input for profile
     # for iwslt, the average length is 23, for wmt, that is 30
-    dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
+    dummy_sentence_length_dict = {'iwslt': 25, 'wmt': 30}
     if 'iwslt' in args.arch:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
     elif 'wmt' in args.arch:
@@ -93,6 +93,7 @@ def main(args):
                 for _ in range(5): 
                     encoder_out_test = model.encoder(src_tokens=src_tokens_test)
             if args.latnpu:
+                print("1")
                 for _ in range(5): 
                     enc.encoder(src_tokens=src_tokens_test)
 
@@ -105,6 +106,7 @@ def main(args):
                     start = time.time()
 
                 if args.latnpu:
+                    print("!! encoder")
                     enc.encoder(src_tokens=src_tokens_test)
                 elif args.latcpu or args.latgpu:
                     model.encoder(src_tokens=src_tokens_test, src_lengths=src_lengths_test)
@@ -172,8 +174,8 @@ def main(args):
 
                 incre_states = {}
                 if args.latnpu:
-                    for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                    for _ in range(decoder_iterations/5): # npu 사용 시 incremental_state 삭제
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
@@ -231,3 +233,4 @@ def cli_main():
 
 if __name__ == '__main__':
     cli_main()
+
