@@ -212,3 +212,52 @@ Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
     E RKNN: [07:47:04.114] rknn_inputs_set, param input size(184) < model input size(200)
     여기서 Segmentation fault가 난것것
     ```
+---
+
+last modified: 2025-02-10
+
+* 모든 데이터셋: 더미 인풋 사이즈를 모델의 실제 인풋 사이즈보다 1 작게(40비트 작게) 입력한 결과 segmentation fault 없이 무사히 작동
+* 특히, k_regressive를 사용하는 디코더 반복문의 경우 인덱싱에 오류가 있는 것 같아 보였음
+* 어차피 incremental_state를 사용하지 않고 + 정적 입력만 가능하기 때문에 나이브한 반복 참조문으로 변경함
+
+1. iwslt14deen
+```sh
+E RKNN: [12:04:54.561] rknn_inputs_set, param input size(960) < model input size(1000)
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1164, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
+```
+2. wmt14ende
+```sh
+E RKNN: [12:04:54.561] rknn_inputs_set, param input size(960) < model input size(1000)
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1164, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
+```
+3. wmt14enfr
+```sh
+E RKNN: [11:50:28.155] rknn_query, RKNN_QUERY_INPUT_ATTR, p_attr->index(2) >= input_num(2)!
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1002, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+  File "rknnlite/api/rknn_runtime.py", line 992, in rknnlite.api.rknn_runtime.RKNNRuntime.get_tensor_attr
+Exception: Query tensor attribute of input node(s) failed, error code: RKNN_ERR_PARAM_INVALID
+```
+4. wmt19ende
+```sh
+E RKNN: [12:04:54.561] rknn_inputs_set, param input size(960) < model input size(1000)
+E Catch exception when setting inputs.
+E Traceback (most recent call last):
+  File "/home/radxa/miniconda3/envs/rknn/lib/python3.9/site-packages/rknnlite/api/rknn_lite.py", line 209, in inference
+    self.rknn_runtime.set_inputs(inputs, data_type, data_format, inputs_pass_through=inputs_pass_through)
+  File "rknnlite/api/rknn_runtime.py", line 1164, in rknnlite.api.rknn_runtime.RKNNRuntime.set_inputs
+Exception: Set inputs failed. error code: RKNN_ERR_PARAM_INVALID
+```
