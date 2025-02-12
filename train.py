@@ -317,11 +317,13 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
 def latency_npu(args):
 
     print("| Set dummy data")
-    dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
+    dummy_sentence_length_dict = {'iwslt': 24, 'wmt': 29}
     if 'iwslt' in args.rknn_model:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
+        dummy_encoder_out_length = 640
     elif 'wmt' in args.rknn_model:
         dummy_sentence_length = dummy_sentence_length_dict['wmt']
+        dummy_encoder_out_length = 512
     else:
         raise NotImplementedError
     dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
@@ -329,15 +331,10 @@ def latency_npu(args):
     src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
     src_lengths_test = torch.tensor([30])
     prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
-    dummy_encoder_out_length = 512
-    if dummy_sentence_length==23:
-        dummy_sentence_length = 25
-        dummy_encoder_out_length = 640
     encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
     encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
 
     print('| Measuring model latency on NPU...')
-
     enc = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.rknn_model, type='enc')
     dec = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.rknn_model, type='dec')
 
@@ -373,7 +370,7 @@ def latency_npu(args):
                         encoder_out=encoder_out_test_with_beam)
 
     # decoder is more complicated because we need to deal with incremental states and auto regressive things
-    decoder_iterations_dict = {'iwslt': 25, 'wmt': 30}
+    decoder_iterations_dict = {'iwslt': 24, 'wmt': 29}
     if 'iwslt' in args.arch:
         decoder_iterations = decoder_iterations_dict['iwslt']
     elif 'wmt' in args.arch:
@@ -384,9 +381,9 @@ def latency_npu(args):
     for _ in tqdm(range(args.latiter)):
         start = time.time()
 
-        for k_regressive in range(decoder_iterations):
-            dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
-                            encoder_out=encoder_out_test_with_beam)    
+        for _ in range(decoder_iterations): 
+            dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                            encoder_out=encoder_out_test_with_beam)   
 
         end = time.time()
         decoder_latencies.append((end - start) * 1000)
