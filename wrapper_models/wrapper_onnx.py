@@ -21,3 +21,16 @@ class WrapperModelONNX(torch.nn.Module):
                 
     def forward(self, *args, **kwargs):
         return self.model(*args, **kwargs)
+    
+    """
+    def make_positions(tensor, padding_idx, onnx_trace=False):
+        mask = tensor.ne(padding_idx).int() 
+        cumsum_result = mask.clone()   
+        for i in range(1, mask.size(1)): 
+            cumsum_result[:, i] += cumsum_result[:, i - 1]  
+
+        return (
+            cumsum_result.type_as(mask) * mask
+        ).long() + padding_idx
+    """
+        
