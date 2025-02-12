@@ -183,16 +183,15 @@ def make_positions(tensor, padding_idx, onnx_trace=False):
     # balanced to both work with ONNX export and XLA. In particular XLA
     # prefers ints, cumsum defaults to output longs, and ONNX doesn't know
     # how to handle the dtype kwarg in cumsum.
-    #if onnx_trace:
-    mask = tensor.ne(padding_idx).int() 
-    cumsum_result = mask.clone()   
-    for i in range(1, mask.size(1)): 
-        cumsum_result[:, i] += cumsum_result[:, i - 1]  
 
+    # to use rknn API, we modified return values that does not use CumSum
+    # 나중에 wrapper_onnx를 사용해서 핸들링하는 방향으로 수정이 필요해 보임 
+    mask = tensor.ne(padding_idx).int()
     return (
-        cumsum_result.type_as(mask) * mask
+        mask
     ).long() + padding_idx
-        
+
+
     # mask = tensor.ne(padding_idx).int()
     # return (
     #     torch.cumsum(mask, dim=1).type_as(mask) * mask

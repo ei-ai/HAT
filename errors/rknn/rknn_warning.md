@@ -12,7 +12,7 @@ python convert2rknn.py --onnx-name=wmt14_en_fr \
 python convert2rknn.py --onnx-name=wmt19_en_de \
     > ./errors/rknn/convert_rknn_wmt19_en_de.txt 2>&1
 python convert2rknn.py --onnx-name=iwslt14_de_en \
-    > ./errors/rknn/convert_rknn_iwslt14_de_en.txt 2>&1
+    > ./errors/rknn/without_cumsum/convert_rknn_iwslt14_de_en.txt 2>&1
 
 python convert2rknn.py --onnx-name=wmt14_en_de --enc \
     > ./errors/rknn/convert_rknn_wmt14.en_de_enc.txt 2>&1

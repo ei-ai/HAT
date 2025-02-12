@@ -11,7 +11,7 @@ import pdb
 import numpy as np
 
 from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
-from wrapper_models import wrapper_rknn_lite
+from wrapper_models import wrapper_rknn
 from tqdm import tqdm
 
 def main(args):
@@ -26,6 +26,7 @@ def main(args):
     torch.manual_seed(args.seed)
 
     # Print args
+    print(args)
 
     # Setup task
     task = tasks.setup_task(args)
@@ -33,12 +34,11 @@ def main(args):
     # Build model
     if args.latcpu or args.latgpu: 
         model = task.build_model(args)
-        print(args)
         print(model)
 
     # specify the length of the dummy input for profile
     # for iwslt, the average length is 23, for wmt, that is 30
-    dummy_sentence_length_dict = {'iwslt': 25, 'wmt': 30}
+    dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
     if 'iwslt' in args.arch:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
     elif 'wmt' in args.arch:
@@ -46,8 +46,8 @@ def main(args):
     else:
         raise NotImplementedError
 
-    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 2)
-    dummy_prev = [7] * (dummy_sentence_length - 2) + [2]
+    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
+    dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
     
     # for latency predictor: latency dataset generation
     with open(args.lat_dataset_path, 'w') as fid:
@@ -69,8 +69,11 @@ def main(args):
             end = torch.cuda.Event(enable_timing=True)
         elif args.latnpu:
             print('Measuring model latency on NPU for dataset generation...')
-            enc = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='enc')
-            dec = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.data.removeprefix('data/binary/'), type='dec')
+            target = 'RK3588'
+            enc = wrapper_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='enc')
+            enc.init_runtime(target)
+            dec = wrapper_rknn.WrapperModelRKNN(model_name=args.data.removeprefix('data/binary/'), type='dec')
+            dec.init_runtime(target)
 
         feature_info = utils.get_feature_info()
         fid.write(','.join(feature_info) + ',')
@@ -136,7 +139,7 @@ def main(args):
             if args.latnpu:
                 dummy_encoder_out_length = 512
                 if dummy_sentence_length==23:
-                    dummy_sentence_length = 24
+                    dummy_sentence_length = 25
                     dummy_encoder_out_length = 640
                 encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
                 encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
@@ -156,7 +159,7 @@ def main(args):
 
 
             # decoder is more complicated because we need to deal with incremental states and auto regressive things
-            decoder_iterations_dict = {'iwslt': 24, 'wmt': 29}
+            decoder_iterations_dict = {'iwslt': 25, 'wmt': 30}
             if 'iwslt' in args.arch:
                 decoder_iterations = decoder_iterations_dict['iwslt']
             elif 'wmt' in args.arch:
@@ -172,8 +175,8 @@ def main(args):
 
                 incre_states = {}
                 if args.latnpu:
-                    for _ in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                    for k_regressive in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
+                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
                                        encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
@@ -201,9 +204,7 @@ def main(args):
             print(f'Decoder latency for dataset generation: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms')
             lats = [np.mean(encoder_latencies), np.mean(decoder_latencies), np.std(encoder_latencies), np.std(decoder_latencies)]
             fid.write(','.join(map(str, lats)) + '\n')
-        if args.latnpu:
-            enc.release()
-            dec.release()
+            
 
 def cli_main():
     parser = options.get_training_parser()
@@ -231,4 +232,3 @@ def cli_main():
 
 if __name__ == '__main__':
     cli_main()
-
