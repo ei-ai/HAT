@@ -7,6 +7,7 @@
 import collections
 import math
 import random
+import time
 import torch
 import pdb
 import numpy as np
@@ -17,7 +18,7 @@ from fairseq.trainer import Trainer
 from fairseq.meters import AverageMeter, StopwatchMeter
 from copy import deepcopy
 
-from wrapper_models import wrapper_rknn
+from wrapper_models import wrapper_rknn_lite
 from tqdm import tqdm
 
 
@@ -314,7 +315,6 @@ def validate(args, trainer, task, epoch_itr, subsets, sampled_arch_name):
 
 
 def latency_npu(args):
-    target = 'RK3588'
 
     print("| Set dummy data")
     dummy_sentence_length_dict = {'iwslt': 23, 'wmt': 30}
@@ -338,29 +338,39 @@ def latency_npu(args):
 
     print('| Measuring model latency on NPU...')
 
-    enc = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='enc')
-    enc.init_runtime(target)
-    # dry runs
-    for _ in range(5):
-        enc.latency()
+    enc = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.rknn_model, type='enc')
+    dec = wrapper_rknn_lite.WrapperModelRKNNLite(model_name=args.rknn_model, type='dec')
 
-    # encoder_latencies = []
-    print('| Measuring encoder...')
-    latency = enc.latency()
-    print('/n/n| Encoder one run on NPU: /n', latency)
+    # dry runs
+    for _ in range(5): 
+        enc.encoder(src_tokens=src_tokens_test)
+
+    encoder_latencies = []
+    print('Measuring encoder for dataset generation...')
+    for _ in tqdm(range(args.latiter)):
+        if args.latgpu:
+            start.record()
+        elif args.latcpu or args.latnpu:
+            start = time.time()
+
+        enc.encoder(src_tokens=src_tokens_test)
+
+        end = time.time()
+        encoder_latencies.append((end - start) * 1000)
+        if not args.latsilent:
+            print('Encoder one run on CPU or NPU (for dataset generation): ', (end - start) * 1000)
+
 
     # only use the 10% to 90% latencies to avoid outliers
-    # print(f'| Encoder latencies: {encoder_latencies}')
-    # encoder_latencies.sort()
-    # encoder_latencies = encoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
-    # print(f'| Encoder latency: Mean: {np.mean(encoder_latencies)} ms; \t Std: {np.std(encoder_latencies)} ms')
-    # enc.release()
+    print(f'| Encoder latencies: {encoder_latencies}')
+    encoder_latencies.sort()
+    encoder_latencies = encoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
+    print(f'| Encoder latency: Mean: {np.mean(encoder_latencies)} ms; \t Std: {np.std(encoder_latencies)} ms')
 
-    dec = wrapper_model_rknn.WrapperModelRKNN(model_name=args.rknn_model, type='dec')
-    dec.init_runtime(target)
     # dry runs
     for _ in range(5):
-        dec.latency()
+        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                        encoder_out=encoder_out_test_with_beam)
 
     # decoder is more complicated because we need to deal with incremental states and auto regressive things
     decoder_iterations_dict = {'iwslt': 25, 'wmt': 30}
@@ -369,20 +379,27 @@ def latency_npu(args):
     elif 'wmt' in args.arch:
         decoder_iterations = decoder_iterations_dict['wmt']
 
-    # decoder_latencies = []
-    print('| Measuring decoder...')
-    latency = dec.latency()
-    print('/n/n| Decoder one run on NPU: /n', latency)
-    
-    # dec.release(decoder=True)
+    decoder_latencies = []
+    print('Measuring decoder for dataset generation...')
+    for _ in tqdm(range(args.latiter)):
+        start = time.time()
+
+        for k_regressive in range(decoder_iterations):
+            dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
+                            encoder_out=encoder_out_test_with_beam)    
+
+        end = time.time()
+        decoder_latencies.append((end - start) * 1000)
+        if not args.latsilent:
+            print('Decoder one run on CPU (for dataset generation): ', (end - start) * 1000)
 
     # only use the 10% to 90% latencies to avoid outliers
-    # decoder_latencies.sort()
-    # decoder_latencies = decoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
-    # print(f'| Decoder latencies: {decoder_latencies}')
-    # print(f'| Decoder latency: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms\n')
+    decoder_latencies.sort()
+    decoder_latencies = decoder_latencies[int(args.latiter * 0.1): -int(args.latiter * 0.1)]
+    print(f'| Decoder latencies: {decoder_latencies}')
+    print(f'| Decoder latency: Mean: {np.mean(decoder_latencies)} ms; \t Std: {np.std(decoder_latencies)} ms\n')
 
-    # print(f"| Overall Latency: {np.mean(encoder_latencies) + np.mean(decoder_latencies)}")
+    print(f"| Overall Latency: {np.mean(encoder_latencies) + np.mean(decoder_latencies)}")
 
 
 def distributed_main(i, args, start_rank=0):
@@ -416,6 +433,7 @@ def cli_main():
 
     if args.latnpu:
         latency_npu(args)
+        return
 
     if args.latcpu:
         args.cpu = True

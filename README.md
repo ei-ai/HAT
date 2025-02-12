@@ -146,8 +146,8 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     ```
     ```sh
     python latency_dataset.py --latnpu --configs=configs/iwslt14.de-en/latency_dataset/npu.yml
-    python latency_dataset_test.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
-    python latency_dataset_test.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
     ```
     * download
