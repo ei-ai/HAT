@@ -1,4 +1,4 @@
-2evo-iter: 30
+evo-iter: 30
 population-size: 125
 parent-size: 25
 mutation-size: 50
