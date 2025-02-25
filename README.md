@@ -83,97 +83,153 @@
 ```sh
 bash configs/[task_name]/get_preprocessed.sh
 ```
+<details>
+<summary>download</summary>
+
 ```sh
 bash configs/wmt14.en-de/get_preprocessed.sh
 bash configs/wmt14.en-fr/get_preprocessed.sh
 bash configs/wmt19.en-de/get_preprocessed.sh
 bash configs/iwslt14.de-en/get_preprocessed.sh
 ```
+</details>
 
 
 ### Train a SuperTransformer
 1. Train a model
-    * train
+    <details>
+    <summary>train</summary>
+
+        ```sh
+        python train.py --configs=configs/wmt14.en-de/supertransformer/space0.yml
+        python train.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml
+        python train.py --configs=configs/wmt19.en-de/supertransformer/space0.yml
+        python train.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml
+        ```
+    </details>
+
     ```sh
-    python train.py --configs=configs/wmt14.en-de/supertransformer/space0.yml
-    python train.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml
-    python train.py --configs=configs/wmt19.en-de/supertransformer/space0.yml
-    python train.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml
+    python train.py --configs=configs/[dataset_name]/supertransformer/space0.yml
     ```
-    * download
+
+    <details>
+    <summary>download</summary>
+
+        ```sh
+        python download_model.py --model-name=HAT_wmt14ende_super_space0
+        python download_model.py --model-name=HAT_wmt14enfr_super_space0
+        python download_model.py --model-name=HAT_wmt19ende_super_space0
+        python download_model.py --model-name=HAT_iwslt14deen_super_space1
+        ```
+    </details>
+
     ```sh
     python download_model.py --model-name=[model_name]
     ```
-    ```sh
-    python download_model.py --model-name=HAT_wmt14ende_super_space0
-    python download_model.py --model-name=HAT_wmt14enfr_super_space0
-    python download_model.py --model-name=HAT_wmt19ende_super_space0
-    python download_model.py --model-name=HAT_iwslt14deen_super_space1
-    ```
+
 
 2. Convert a model    
+    <details>
+    <summary>convert</summary>
+    
     * `.pt` to `.onnx`
-    ```sh
-    python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml [--enc|--dec]
-    ```
     ```sh
     python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml
     python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml   --enc
+    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml   --enc
+    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml   --enc
+    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml   --enc
+    python convert2onnx.py --configs=configs/wmt14.en-de/convert_onnx/super.yml   --dec
+    python convert2onnx.py --configs=configs/wmt14.en-fr/convert_onnx/super.yml   --dec
+    python convert2onnx.py --configs=configs/wmt19.en-de/convert_onnx/super.yml   --dec
+    python convert2onnx.py --configs=configs/iwslt14.de-en/convert_onnx/super.yml   --dec
     ```
+
     * `.onnx` to `.rknn`
-    ```sh
-    python convert2rknn.py --onnx-name=[model_name] [--enc|--dec]
-    ```
     ```sh
     python convert2rknn.py --onnx-name=wmt14_en_de
     python convert2rknn.py --onnx-name=wmt14_en_fr
     python convert2rknn.py --onnx-name=wmt19_en_de
     python convert2rknn.py --onnx-name=iwslt14_de_en
+    python convert2rknn.py --onnx-name=wmt14_en_de   --enc
+    python convert2rknn.py --onnx-name=wmt14_en_fr   --enc
+    python convert2rknn.py --onnx-name=wmt19_en_de   --enc
+    python convert2rknn.py --onnx-name=iwslt14_de_en   --enc
+    python convert2rknn.py --onnx-name=wmt14_en_de   --dec
+    python convert2rknn.py --onnx-name=wmt14_en_fr   --dec
+    python convert2rknn.py --onnx-name=wmt19_en_de   --dec
+    python convert2rknn.py --onnx-name=iwslt14_de_en   --dec
     ```
+    </details>
+
+    ```sh
+    python convert2onnx.py --configs=configs/[task_name]/convert_onnx/[search_space].yml [--enc|--dec]
+    python convert2rknn.py --onnx-name=[model_name] [--enc|--dec]
+    ```
+
     * download
     ```
     gdown --folder https://drive.google.com/drive/folders/1dB2Wha-Sl2I_qBM_Ty01RXBfCRXOHt5L
     ```
 
 
+
 ### Evolutionary Search  
 1.  Generate a latency dataset
-    * generate
-    ```sh
-    python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
-    ```
+    <details>
+    <summary>generate</summary>
+
     ```sh
     python latency_dataset.py --latnpu --configs=configs/iwslt14.de-en/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
     python latency_dataset.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
     ```
+    </details>
+
+    ```sh
+    python latency_dataset.py --configs=configs/[task_name]/latency_dataset/[hardware_name].yml
+    ```
+
     * download
     ```sh
     gdown --folder https://drive.google.com/drive/folders/1ejT4pdvw0VM6Y0XICrnQ-iWwYaOLjxRp
     ```
 2. Train a latency predictor
-    ```sh
-    python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
-    ```
+    <details>
+    <summary>npu example</summary>
+
     ```sh
     python latency_predictor.py --configs=configs/iwslt14.de-en/latency_predictor/npu.yml
     python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/npu.yml
     python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/npu.yml
     python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml
     ```
-3. Run evolutionary search with a latency constraint  
+    </details>
+
     ```sh
-    python evo_search.py --configs=[supertransformer_config_file].yml --evo-configs=[evo_settings].yml
+    python latency_predictor.py --configs=configs/[task_name]/latency_predictor/[hardware_name].yml
     ```
+    
+3. Run evolutionary search with a latency constraint  
+    <details>
+    <summary>npu example</summary>
+
     ```sh
     python evo_search.py --configs=configs/wmt14.en-de/supertransformer/space0.yml --evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml
     python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml --evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml
-    python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-fr/evo_search/wmt19ende_npu.yml
+    python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-de/evo_search/wmt19ende_npu.yml
     python evo_search.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml --evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml
     ```
+    </details>
+
+    ```sh
+    python evo_search.py --configs=[supertransformer_config_file].yml --evo-configs=[evo_settings].yml
+    ```
+
 
 
 ### Train a Searched SubTransformer

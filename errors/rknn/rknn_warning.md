@@ -24,13 +24,18 @@ python convert2rknn.py --onnx-name=iwslt14_de_en --enc \
     > ./errors/rknn/convert_rknn_iwslt14_de_en_enc.txt 2>&1
 
 python convert2rknn.py --onnx-name=wmt14_en_de --dec \
-    > ./errors/rknn/convert_rknn_wmt14.en_de_dec.txt 2>&1
+    > ./errors/rknn/small/convert_rknn_wmt14.en_de_dec.txt 2>&1
 python convert2rknn.py --onnx-name=wmt14_en_fr --dec \
-    > ./errors/rknn/convert_rknn_wmt14.en_fr_dec.txt 2>&1
+    > ./errors/rknn/small/convert_rknn_wmt14.en_fr_dec.txt 2>&1
 python convert2rknn.py --onnx-name=wmt19_en_de --dec \
-    > ./errors/rknn/convert_rknn_wmt19_en_de_dec.txt 2>&1
+    > ./errors/rknn/small/convert_rknn_wmt19_en_de_dec.txt 2>&1
 python convert2rknn.py --onnx-name=iwslt14_de_en --dec \
-    > ./errors/rknn/convert_rknn_iwslt14_de_en_dec.txt 2>&1
+    > ./errors/rknn/small/convert_rknn_iwslt14_de_en_dec.txt 2>&1
+
+python convert2rknn.py --onnx-name=iwslt14_de_en --enc \
+    > ./errors/rknn/small/convert_rknn_iwslt14_de_en_enc.txt 2>&1
+python convert2rknn.py --onnx-name=iwslt14_de_en --dec \
+    > ./errors/rknn/small/convert_rknn_iwslt14_de_en_dec.txt 2>&1    
 ```
 
 # wmt16_en_de
