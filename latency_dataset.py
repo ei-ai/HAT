@@ -38,7 +38,7 @@ def main(args):
 
     # specify the length of the dummy input for profile
     # for iwslt, the average length is 23, for wmt, that is 30
-    dummy_sentence_length_dict = {'iwslt': 25, 'wmt': 30}
+    dummy_sentence_length_dict = {'iwslt': 24, 'wmt': 29}
     if 'iwslt' in args.arch:
         dummy_sentence_length = dummy_sentence_length_dict['iwslt']
     elif 'wmt' in args.arch:
@@ -46,8 +46,8 @@ def main(args):
     else:
         raise NotImplementedError
 
-    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 2)
-    dummy_prev = [7] * (dummy_sentence_length - 2) + [2]
+    dummy_src_tokens = [2] + [7] * (dummy_sentence_length - 1)
+    dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
     
     # for latency predictor: latency dataset generation
     with open(args.lat_dataset_path, 'w') as fid:
@@ -135,8 +135,7 @@ def main(args):
 
             if args.latnpu:
                 dummy_encoder_out_length = 512
-                if dummy_sentence_length==23:
-                    dummy_sentence_length = 24
+                if dummy_sentence_length==24: #iwslt
                     dummy_encoder_out_length = 640
                 encoder_out_test_with_beam = [[7] * dummy_encoder_out_length for _ in range(5)]
                 encoder_out_test_with_beam = torch.tensor([encoder_out_test_with_beam] * dummy_sentence_length, dtype=torch.long)
