@@ -26,6 +26,7 @@ latency_dataset/
 !errors/latency_dataset
 onnx_models/
 rknn_models/
+rknn_latency_dataset/
 __pycache__/
 .DS_Store
 *.onnx
