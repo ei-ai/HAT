@@ -14,6 +14,7 @@ downloaded_models/
 errors/onnx/*.txt
 errors/rknn/*.txt
 errors/rknn/convert_rknn/
+errors/rknn/small/
 errors/rknn/without_onnxsim/
 errors/rknn/without_cumsum/
 fairseq_original/
