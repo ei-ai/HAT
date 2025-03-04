@@ -23,7 +23,6 @@ fairseq.egg-info/
 fairseq/data/data_utils_fast.cpp
 fairseq/data/token_block_utils_fast.c
 !latency_dataset/
-latency_dataset/
 !errors/latency_dataset
 onnx_models/
 rknn_models/
