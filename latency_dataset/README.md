@@ -13,6 +13,13 @@ python latency_dataset_test.py --latnpu --configs=configs/wmt19.en-de/latency_da
 ```
 
 ```sh
+python latency_predictor.py --configs=configs/iwslt14.de-en/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/iwslt14deen_npu.csv
+python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt14ende_npu.csv
+python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt14enfr_npu.csv
+python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt19ende_npu.csv
+```
+
+```sh
 python evo_search.py --configs=configs/wmt14.en-de/supertransformer/space0.yml --evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml --cpu --num-workers=8
 python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml --evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml --cpu --num-workers=8
 python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-de/evo_search/wmt19ende_npu.yml --cpu --num-workers=8
