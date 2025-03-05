@@ -116,7 +116,10 @@ bash configs/iwslt14.de-en/get_preprocessed.sh
     <summary>download</summary>
 
         ```sh
-c
+        python download_model.py --model-name=HAT_wmt14ende_super_space0
+        python download_model.py --model-name=HAT_wmt14enfr_super_space0
+        python download_model.py --model-name=HAT_wmt19ende_super_space0
+        python download_model.py --model-name=HAT_iwslt14deen_super_space1
         ```
     </details>
 
@@ -180,10 +183,10 @@ c
     <summary>generate</summary>
 
     ```sh
-    python latency_dataset_test.py --latnpu --configs=configs/iwslt14.de-en/latency_dataset/npu.yml
-    python latency_dataset_test.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
-    python latency_dataset_test.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
-    python latency_dataset_test.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/iwslt14.de-en/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-de/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt14.en-fr/latency_dataset/npu.yml
+    python latency_dataset.py --latnpu --configs=configs/wmt19.en-de/latency_dataset/npu.yml
     ```
     </details>
 
@@ -200,10 +203,10 @@ c
     <summary>npu example</summary>
 
     ```sh
-    python latency_predictor.py --configs=configs/iwslt14.de-en/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/iwslt14deen_npu.csv
-    python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt14ende_npu.csv
-    python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt14enfr_npu.csv
-    python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml --lat-dataset-path=./latency_dataset/test1/wmt19ende_npu.csv
+    python latency_predictor.py --configs=configs/iwslt14.de-en/latency_predictor/npu.yml
+    python latency_predictor.py --configs=configs/wmt14.en-de/latency_predictor/npu.yml
+    python latency_predictor.py --configs=configs/wmt14.en-fr/latency_predictor/npu.yml
+    python latency_predictor.py --configs=configs/wmt19.en-de/latency_predictor/npu.yml
     ```
     </details>
 
@@ -216,10 +219,10 @@ c
     <summary>npu example</summary>
 
     ```sh
-    python evo_search.py --configs=configs/wmt14.en-de/supertransformer/space0.yml --evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml --cpu --num-workers=8
-    python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml --evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml --cpu --num-workers=8
-    python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-de/evo_search/wmt19ende_npu.yml --cpu --num-workers=8
-    python evo_search.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml --evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml --cpu --num-workers=8
+    python evo_search.py --configs=configs/wmt14.en-de/supertransformer/space0.yml --evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml
+    python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml --evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml
+    python evo_search.py --configs=configs/wmt19.en-de/supertransformer/space0.yml --evo-configs=configs/wmt19.en-de/evo_search/wmt19ende_npu.yml
+    python evo_search.py --configs=configs/iwslt14.de-en/supertransformer/space1.yml --evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml
     ```
     </details>
 
