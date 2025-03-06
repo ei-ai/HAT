@@ -51,3 +51,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+wget-log
+configs/wmt19.en-de/subtransformer/wmt19ende_npu@200ms.yml
+latency_dataset/iwslt14deen_npu.csv:Zone.Identifier
+latency_dataset/wmt14ende_npu.csv:Zone.Identifier
+latency_dataset/wmt14enfr_npu.csv:Zone.Identifier
+latency_dataset/wmt19ende_npu.csv:Zone.Identifier
