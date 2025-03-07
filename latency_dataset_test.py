@@ -15,6 +15,8 @@ from wrapper_models import wrapper_rknn_lite
 from tqdm import tqdm
 
 def main(args):
+    # 데이터셋 저장 용 파일 경로명 
+    test = 'test' + args.testn + '/'
     utils.import_user_module(args)
 
     assert args.max_tokens is not None or args.max_sentences is not None, \
@@ -50,7 +52,7 @@ def main(args):
     dummy_prev = [7] * (dummy_sentence_length - 1) + [2]
     
     # for latency predictor: latency dataset generation
-    with open(args.lat_dataset_path[0:18] + "test1/" + args.lat_dataset_path[18:], 'w') as fid:
+    with open(args.lat_dataset_path[0:18] + test + args.lat_dataset_path[18:], 'w') as fid:
         src_tokens_test = torch.tensor([dummy_src_tokens], dtype=torch.long)
         src_lengths_test = torch.tensor([dummy_sentence_length])
         prev_output_tokens_test_with_beam = torch.tensor([dummy_prev] * args.beam, dtype=torch.long)
@@ -171,9 +173,9 @@ def main(args):
 
                 incre_states = {}
                 if args.latnpu:
-                    for _ in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
-                        dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
-                                       encoder_out=encoder_out_test_with_beam)
+                    # for _ in range(decoder_iterations): # npu 사용 시 incremental_state 삭제
+                    dec.decoder(prev_output_tokens=prev_output_tokens_test_with_beam,
+                                    encoder_out=encoder_out_test_with_beam)
                 elif args.latcpu or args.latgpu:
                     for k_regressive in range(decoder_iterations):
                         model.decoder(prev_output_tokens=prev_output_tokens_test_with_beam[:, :k_regressive + 1],
@@ -212,6 +214,7 @@ def cli_main():
     parser.add_argument('--latiter', type=int, default=300, help='how many iterations to run when measure the latency')
     parser.add_argument('--latsilent', action='store_true', help='keep silent when measure latency')
 
+    parser.add_argument('--testn', type=str, default='', help='the number of test')
     parser.add_argument('--lat-dataset-path', type=str, default='./latency_dataset/lat.tmp', help='the path to write latency dataset')
     parser.add_argument('--lat-dataset-size', type=int, default=200, help='number of data points for the dataset')
     
