@@ -15,7 +15,7 @@ from wrapper_models import wrapper_rknn_lite
 from tqdm import tqdm
 
 def main(args):
-    # 데이터셋 저장 용 파일 경로명 
+    # 데이터셋 저장용 파일 경로명 
     test = 'test' + args.testn + '/'
     utils.import_user_module(args)
 
