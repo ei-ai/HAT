@@ -33,11 +33,15 @@ python latency_dataset_test.py \
 ```sh
 python latency_predictor.py \
 --configs=configs/iwslt14.de-en/latency_predictor/npu.yml \
---lat-dataset-path=./latency_dataset/test1/iwslt14deen_npu.csv
+--lat-dataset-path=./latency_dataset/test1/iwslt14deen_npu.csv \
+--ckpt-path=./latency_dataset/predictors/test1/iwslt14deen_npu.pt
+
 
 python latency_predictor.py \
 --configs=configs/wmt14.en-de/latency_predictor/npu.yml  \
---lat-dataset-path=./latency_dataset/test1/wmt14ende_npu.csv
+--lat-dataset-path=./latency_dataset/test1/wmt14ende_npu.csv \
+--ckpt-path=./latency_dataset/predictors/test1/wmt14ende_npu.pt
+
 
 python latency_predictor.py \
 --configs=configs/wmt14.en-fr/latency_predictor/npu.yml \
@@ -75,7 +79,25 @@ python evo_search.py \
 --cpu --num-workers=8 \
 > ./test_results/test1/wmt19.en-de.txt 2>&1
 ```
+python evo_search.py \
+--configs=configs/iwslt14.de-en/supertransformer/space1.yml \
+--evo-configs=configs/iwslt14.de-en/evo_search/iwslt14deen_npu.yml \
+--cpu --num-workers=8 \
+--ckpt-path=./latency_dataset/predictors/test1/iwslt14deen_npu.pt \
+> ./test_results/test1/iwslt14.de-en.txt 2>&1
 
+python evo_search.py \
+--configs=configs/wmt14.en-de/supertransformer/space0.yml \
+--evo-configs=configs/wmt14.en-de/evo_search/wmt14ende_npu.yml \
+--cpu --num-workers=8 \
+--ckpt-path=./latency_dataset/predictors/test1/wmt14ende_npu.pt \
+> ./test_results/test1/wmt14.en-de.txt 2>&1
+
+python evo_search.py --configs=configs/wmt14.en-fr/supertransformer/space0.yml \
+--evo-configs=configs/wmt14.en-fr/evo_search/wmt14enfr_npu.yml \
+--cpu --num-workers=8 \
+--ckpt-path=./latency_dataset/predictors/test1/wmt14enfr_npu.pt \
+> ./test_results/test1/wmt14.en-fr.txt 2>&1
 ---
 
 # 기타
