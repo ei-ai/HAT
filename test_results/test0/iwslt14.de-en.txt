@@ -51,3 +51,14 @@ TransformerSuperModel(
 | loaded 7283 examples from: data/binary/iwslt14_de_en/valid.de-en.en
 | data/binary/iwslt14_de_en valid de-en 7283 examples
 | Start Iteration 0:
+| Iteration 0, Lowest loss: 6.242208774928935
+| Config for lowest loss model: {'encoder': {'encoder_embed_dim': 640, 'encoder_layer_num': 6, 'encoder_ffn_embed_dim': [512, 512, 1024, 1024, 512, 512], 'encoder_self_attention_heads': [2, 4, 2, 4, 2, 4]}, 'decoder': {'decoder_embed_dim': 512, 'decoder_layer_num': 6, 'decoder_ffn_embed_dim': [512, 1024, 512, 512, 2048, 2048], 'decoder_self_attention_heads': [2, 4, 2, 4, 2, 2], 'decoder_ende_attention_heads': [2, 4, 2, 4, 2, 2], 'decoder_arbitrary_ende_attn': [2, -1, -1, 2, -1, 1]}}
+| Predicted latency for lowest loss model: 25.291770696640015
+| Start Iteration 1:
+| Iteration 1, Lowest loss: 6.225755432104746
+| Config for lowest loss model: {'encoder': {'encoder_embed_dim': 640, 'encoder_layer_num': 6, 'encoder_ffn_embed_dim': [2048, 512, 1024, 2048, 512, 512], 'encoder_self_attention_heads': [2, 4, 4, 4, 4, 4]}, 'decoder': {'decoder_embed_dim': 512, 'decoder_layer_num': 5, 'decoder_ffn_embed_dim': [512, 1024, 512, 1024, 2048, 2048], 'decoder_self_attention_heads': [2, 4, 2, 4, 4, 2], 'decoder_ende_attention_heads': [2, 4, 4, 4, 2, 2], 'decoder_arbitrary_ende_attn': [2, -1, -1, 2, -1, 1]}}
+| Predicted latency for lowest loss model: 25.63534677028656
+| Start Iteration 2:
+| Iteration 2, Lowest loss: 6.215169651399158
+| Config for lowest loss model: {'encoder': {'encoder_embed_dim': 640, 'encoder_layer_num': 6, 'encoder_ffn_embed_dim': [2048, 2048, 2048, 1024, 1024, 512], 'encoder_self_attention_heads': [2, 2, 2, 2, 2, 4]}, 'decoder': {'decoder_embed_dim': 512, 'decoder_layer_num': 5, 'decoder_ffn_embed_dim': [512, 512, 1024, 1024, 2048, 2048], 'decoder_self_attention_heads': [2, 4, 4, 2, 2, 2], 'decoder_ende_attention_heads': [4, 4, 4, 4, 2, 2], 'decoder_arbitrary_ende_attn': [1, -1, -1, -1, 1, 1]}}
+| Predicted latency for lowest loss model: 25.492873787879944
